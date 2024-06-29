@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-class VotingRes(BaseModel):
+class UploadRes(BaseModel):
     success: bool
     results: list

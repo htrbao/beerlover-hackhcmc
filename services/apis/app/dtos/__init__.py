@@ -1,1 +1,1 @@
-from .upload import VotingRes
+from .upload import UploadRes

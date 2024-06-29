@@ -113,7 +113,7 @@ class ChatGPT(AbstractLanguageModel):
                         "type": "image_url",
                         "image_url": {
                             "url": image,#f"data:image/jpeg;base64,{main_image}",
-                            "detail": "low"
+                            "detail": "high"
                             }
                         
                     },

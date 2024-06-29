@@ -37,6 +37,7 @@ log_mng = LogManager("test.log", level="debug")
 
 @app.post("/upload")
 async def upload(file: UploadFile) -> UploadRes:
+    global log_mng
     try:
         beer_can_infos =[]
         beer_carton_infos =[]

@@ -1,3 +1,4 @@
+from pathlib import Path
 from functools import lru_cache
 from typing import Union
 
@@ -7,6 +8,8 @@ from PIL import Image
 
 from services.common import VisionModel
 
+CWD = Path(__file__).parent
+print(CWD)
 
 class DinoVisionModel(VisionModel):
     def __init__(self, device: str = "cuda"):

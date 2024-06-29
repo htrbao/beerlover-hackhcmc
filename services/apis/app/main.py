@@ -10,15 +10,11 @@ from services.siglip_iir.src import SiglipVisionModel
 
 # from .config import settings
 from .dtos import UploadRes
+from ..utils import recognize_siglip_n_dino
 
 app = FastAPI()
 model_siglip = SiglipVisionModel(device="cpu")
 model_dino = DinoVisionModel(device="cpu")
-
-index_siglip, configs_siglip = read_index(
-    "data/faiss-index", "SigLIP.faiss", "SigLIP.json"
-)
-index_dino, configs_dino = read_index("data/faiss-index", "Dino.faiss", "Dino.json")
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,15 +26,14 @@ app.add_middleware(
 
 @app.post("/upload")
 async def upload(file: UploadFile) -> UploadRes:
-    img = Image.open(file.file).convert("RGB")
-    xq_s = model_siglip.get_embedding(img)
-    xq_d = model_dino.get_embedding(img)
+    try:
+        img = Image.open(file.file).convert("RGB")
 
-    D, I = index_siglip.search(xq_s, 5)
-    res_siglip = [configs_siglip[i] for i in I[0]]
-    D, I = index_dino.search(xq_d, 5)
-    res_dino = [configs_dino[i] for i in I[0]]
+        votes = recognize_siglip_n_dino(img)
+        print(votes)
 
-    return UploadRes(success=True, results=[*res_siglip, *res_dino])
+        return UploadRes(success=True, results={})
+    except Exception as e:
+        return UploadRes(success=False, results={"message": str(e)})
 
 

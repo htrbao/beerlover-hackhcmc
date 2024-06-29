@@ -1,0 +1,1 @@
+from .iir import Beit3VisionModel

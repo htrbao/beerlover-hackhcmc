@@ -1,0 +1,43 @@
+label {
+    background-color: var(--txt-color);
+    color: white;
+    padding: 0.5rem;
+    font-family: sans-serif;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.upload-file-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+}
+
+.upload-btn-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-and-drag {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--box-bg);
+    font-size: medium;
+    padding: 1rem 3rem 1rem 3rem;
+    border-radius: 20px;
+    /* box-shadow: var(--box-shadow); */
+    min-width: 440px;
+    min-height: 500px;
+    max-width: 600px;
+    max-height: 500px;
+}
+
+.upload-image {
+    height: 470px;
+    object-fit: cover;
+}

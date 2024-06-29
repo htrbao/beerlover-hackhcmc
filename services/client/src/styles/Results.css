@@ -1,0 +1,27 @@
+.results-container {
+    width: 100%;
+    height: 100%;
+
+    background-color: #f8f8f8;
+}
+
+.analyzed-result-container h1 {
+    margin: 2% 0 0 2%;
+}
+
+.analyzed-results-list {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    gap: 25px;
+    margin: 10px 10px 0 20px;
+}
+
+.distribution-list {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}

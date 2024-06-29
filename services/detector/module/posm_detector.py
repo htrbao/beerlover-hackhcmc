@@ -13,19 +13,23 @@ POSM_CLASS = [3, 5, 6, 8, 9, 12, 15,17,19]
 ID2NAME = {3: 'billboard', 5: 'bucket', 6: 'campain-objects', 8: 'display-stand', 9: 'fridge', 12: 'parasol', 15: 'signage', 17: 'standee', 19: 'tent-card'}
 
 class PosmDetector:
-    def __init__(self, model_path = "weights/posm.pt"):
+    def __init__(self, model_path = "weights/posm.pt", billboard_model_path = "weights/billboard_yolov10s.pt"):
         self.log_mng = LogManager("test.log", level="debug")
         self.model = YOLOv10(model_path)
+        # self.billboard_model = YOLOv10(billboard_model_path)
 
         self.lm = ChatGPT(log_mng=self.log_mng)
         self.posmprompter = POSMPrompter(self.lm)
         self.prompt_executor = PromptExecutor().add_prompter(self.posmprompter).build()
 
 
-    async def detect_for_prompter(self, img):
+    async def detect(self, img):
         numpy_img = cv2.imread(img)
         results = self.model(numpy_img)
+        # billboard_results = self.billboard_model(numpy_img, save=True)
         filtered_boxes_v10 = [{"box": box, "class": ID2NAME[int(box.cls)]} for box in results[0].boxes if box.cls in POSM_CLASS]
+        # billboard_results = [{"box": box, "class": "billboard"} for box in billboard_results[0].boxes]
+        # filtered_boxes_v10.extend(billboard_results)
         croped_imgs = []
         for box in filtered_boxes_v10:
             xyxy = list(map(int, box['box'].xyxy.view(-1).tolist()))

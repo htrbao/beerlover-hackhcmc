@@ -77,10 +77,9 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         print(drinker_counter)
         
         carton_detector = CartonDetector()
-        carton_croped_base64_imgs = human_detector.detect(np.asarray(img))
+        carton_croped_base64_imgs = carton_detector.detect(np.asarray(img))
         carton_results = []
         for carton in carton_croped_base64_imgs:
-            print(type(carton))
             brand = recognize_siglip_n_dino(carton)
             carton_results.append(brand)
         carton_counter = await count_carton(carton_results)

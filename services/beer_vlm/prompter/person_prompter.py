@@ -57,11 +57,11 @@ There is a person in the image at {location} location. Answer the type of that p
         return answers
     
     async def get_answer(self, img, main_image, **results):
-        # answer = await self._get_answer(img, main_image, **results)
-        try:
-            answer = await self._get_answer(img, main_image, **results)
-        except:
-            answer = await self.default_person()
+        answer = await self._get_answer(img, main_image, **results)
+        # try:
+        #     answer = await self._get_answer(img, main_image, **results)
+        # except:
+        #     answer = await self.default_person()
         return answer
         
     @backoff.on_exception(backoff.expo, exception=Exception,max_time=5, max_tries=2)

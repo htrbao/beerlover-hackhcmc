@@ -1,7 +1,7 @@
 import os
 import logging
 from logging.handlers import RotatingFileHandler
-from beer_vlm.configs import LOG_PATH
+from services.beer_vlm.configs import LOG_PATH
 
 class LogManager(object):
     level_relations = {

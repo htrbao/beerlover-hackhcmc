@@ -8,7 +8,7 @@
 
 from abc import ABC, abstractmethod
 from typing import List, Dict, Union, Any, Optional
-from beer_vlm.configs import LM_CONFIG
+from services.beer_vlm.configs import LM_CONFIG
 
 class AbstractLanguageModel(ABC):
     """

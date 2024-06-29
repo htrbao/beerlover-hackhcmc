@@ -3,8 +3,8 @@ import json
 import asyncio
 from typing import Optional
 
-from beer_vlm.logger import LogManager
-from beer_vlm.language_model import AbstractLanguageModel
+from services.beer_vlm.logger import LogManager
+from services.beer_vlm.language_model import AbstractLanguageModel
 from .abstract_prompter import AbstractPrompter
 
 
@@ -62,9 +62,9 @@ There is a POSM in the image. Answer the brand of that POSM in JSON format.
         return answer
         
     @backoff.on_exception(backoff.expo, exception=Exception,max_time=5, max_tries=2)
-    async def _get_answer(self, img, main_image, **results):
+    async def _get_answer(self, img, **results):
         query_prompt = self.posm_prompt
-        answer = await self.lm.query(query_prompt, img, 1, self.system_prompt, main_image=main_image)
+        answer = await self.lm.query(query_prompt, img, 1, self.system_prompt)
         answer = await self.lm.get_response_texts(answer)
         answer = answer[0]
         answer = json.loads(answer)

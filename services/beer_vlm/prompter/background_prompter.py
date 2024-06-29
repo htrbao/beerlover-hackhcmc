@@ -30,7 +30,7 @@ You answer should be the JSON format, example:
 }
         """
         self.background_prompt = """
-Answer the location, atmosphere and emotion of image in JSON format.
+Answer the location, atmosphere, emotion and activity of image in JSON format.
 """
 # - People who are appearing in the background that could be customers, promotion peoples, etc. If promotion people are in the background, you should describe about logo or brand on their image which beer they are promoting.
 

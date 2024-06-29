@@ -179,9 +179,6 @@ class ChatGPT(AbstractLanguageModel):
             self.prompt_token_cost * prompt_tokens_k
             + self.response_token_cost * completion_tokens_k
         )
-        self.log_mng.logger.debug(f"Prompt: {messages[-1]}")
-        self.log_mng.logger.debug("Cost: %f", self.cost)
-        print(self.cost)
         return response
 
     async def get_response_texts(self, query_response: Union[List[Dict], Dict]) -> List[str]:

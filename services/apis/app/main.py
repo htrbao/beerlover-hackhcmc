@@ -32,6 +32,7 @@ async def upload(file: UploadFile) -> UploadRes:
 
         return UploadRes(success=True, results={})
     except Exception as e:
+        print(e)
         return UploadRes(success=False, results={"message": str(e)})
 
 

@@ -18,12 +18,7 @@ class PosmDetector:
         self.model = YOLOv10(model_path)
         # self.billboard_model = YOLOv10(billboard_model_path)
 
-        self.lm = ChatGPT(log_mng=self.log_mng)
-        self.posmprompter = POSMPrompter(self.lm)
-        self.prompt_executor = PromptExecutor().add_prompter(self.posmprompter).build()
-
-
-    async def detect(self, img):
+    def detect(self, img):
         numpy_img = cv2.imread(img)
         results = self.model(numpy_img)
         # billboard_results = self.billboard_model(numpy_img, save=True)
@@ -41,7 +36,5 @@ class PosmDetector:
             img.save(buffered, format="JPEG")
             img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
             croped_base64_imgs.append(img_str)
-        labels = await self.prompt_executor.execute(None, {"posm_images": croped_base64_imgs})
-        labels = labels["posm"]
         
-        return labels
+        return croped_base64_imgs

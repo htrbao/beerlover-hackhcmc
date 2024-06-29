@@ -7,9 +7,9 @@ from services.siglip_iir.src import SiglipVisionModel
 from services.beit3_iir.src import Beit3VisionModel
 
 
-model_siglip = SiglipVisionModel(device="cpu")
-model_dino = DinoVisionModel(device="cpu")
-model_beit3 = Beit3VisionModel(device="cpu")
+model_siglip = SiglipVisionModel(device="cuda")
+model_dino = DinoVisionModel(device="cuda")
+model_beit3 = Beit3VisionModel(device="cuda")
 
 index_siglip, configs_siglip = read_index("data/faiss-index", "SigLIP.faiss", "SigLIP.json")
 index_dino, configs_dino = read_index("data/faiss-index", "Dino.faiss", "Dino.json")

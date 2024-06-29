@@ -33,11 +33,11 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
 )
-log_mng = LogManager("test.log", level="debug")
+# log_mng = LogManager("test.log", level="debug")
 
 @app.post("/upload")
 async def upload(file: UploadFile) -> UploadRes:
-    global log_mng
+    # global log_mng
     try:
         beer_can_infos =[]
         beer_carton_infos =[]
@@ -46,7 +46,7 @@ async def upload(file: UploadFile) -> UploadRes:
 
         votes = recognize_siglip_n_dino(img)
         print(votes)
-        lm = ChatGPT(log_mng)
+        lm = ChatGPT()
         ps_prompter = PersonPrompter(lm)
         bg_prompter = BackgroundPrompter(lm)
         bg_ps_prompt_executor = PromptExecutor().add_prompter(bg_prompter).add_prompter(ps_prompter).build()

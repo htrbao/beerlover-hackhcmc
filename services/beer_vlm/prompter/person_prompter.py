@@ -50,7 +50,6 @@ There is a person in the image at {location} location. Answer the type of that p
         answers = []
         tasks = []
         for img in person_imgs:
-            
             task = self.get_answer(img, main_image, **results)
             tasks.append(task)
         answers = await asyncio.gather(*tasks)

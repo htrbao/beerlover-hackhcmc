@@ -1,0 +1,21 @@
+.upload-progress-bar {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 0 20px 0 20px;
+    background-color: #f6f6f6;
+    border: 2px dashed #7e7e80;
+    border-radius: 20px;
+}
+
+.custom-progressBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+progress {
+    width: 100%;
+}

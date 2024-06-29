@@ -126,6 +126,9 @@ const Results = ({beer_infos, beer_distribution}) => {
                     <PieChart beer_distribution={beer_distribution}/>
                 </div>
             </div>
+            <p>
+                hahahaha
+            </p>
         </div>
     );
 };

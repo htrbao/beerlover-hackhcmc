@@ -27,12 +27,10 @@ class PromptExecutor(object):
         :param image: base64 encoded image
         :type: str
         """
-        start_time = time.monotonic()
         if results is None:
             results = dict()
         for prompter in self.prompters:
             results[prompter.name] = await prompter.query(image, **results)
-        print('time: ', time.monotonic() - start_time)
         
         return results
         

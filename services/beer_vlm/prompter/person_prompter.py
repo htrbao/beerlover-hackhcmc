@@ -1,5 +1,6 @@
 import backoff
 import json
+import time
 import asyncio
 from typing import Optional
 
@@ -49,6 +50,7 @@ There is a person in the image at {location} location. Answer the type of that p
         answers = []
         tasks = []
         for img in person_imgs:
+            
             task = self.get_answer(img, main_image, **results)
             tasks.append(task)
         answers = await asyncio.gather(*tasks)
@@ -64,11 +66,14 @@ There is a person in the image at {location} location. Answer the type of that p
         
     @backoff.on_exception(backoff.expo, exception=Exception,max_time=5, max_tries=2)
     async def _get_answer(self, img, main_image, **results):
+        start_time = time.monotonic()
         query_prompt = self.person_prompt.format(location=results.get("background", {}).get("location", ""))
         answer = await self.lm.query(query_prompt, img, 1, self.system_prompt, main_image=main_image)
         answer = await self.lm.get_response_texts(answer)
         answer = answer[0]
         answer = json.loads(answer)
+        print('time: ', time.monotonic() - start_time)
+        
         return answer
         
     async def query(self, image: Optional[str], **results) -> str:

@@ -21,7 +21,13 @@ class UploadRes(BaseModel):
             },
             //...
             }
-        ]
+        ],
+        "background": {
+            'location': 'street restaurant', 
+            'activity': 'dining', 
+            'atmosphere': ['casual', 'welcoming', 'bustling'], 
+            'emotion': ['relaxed', 'social', 'content']
+        }
     }
     """
     success: bool

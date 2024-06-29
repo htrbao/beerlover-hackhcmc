@@ -57,22 +57,20 @@ There is a person in the image at {location} location. Answer the type of that p
         return answers
     
     async def get_answer(self, img, main_image, **results):
-        answer = await self._get_answer(img, main_image, **results)
-        # try:
-        #     answer = await self._get_answer(img, main_image, **results)
-        # except:
-        #     answer = await self.default_person()
+        # answer = await self._get_answer(img, main_image, **results)
+        try:
+            answer = await self._get_answer(img, main_image, **results)
+        except:
+            answer = await self.default_person()
         return answer
         
     @backoff.on_exception(backoff.expo, exception=Exception,max_time=5, max_tries=2)
     async def _get_answer(self, img, main_image, **results):
-        start_time = time.monotonic()
         query_prompt = self.person_prompt.format(location=results.get("background", {}).get("location", ""))
         answer = await self.lm.query(query_prompt, img, 1, self.system_prompt, main_image=main_image)
         answer = await self.lm.get_response_texts(answer)
         answer = answer[0]
         answer = json.loads(answer)
-        print('time: ', time.monotonic() - start_time)
         
         return answer
         

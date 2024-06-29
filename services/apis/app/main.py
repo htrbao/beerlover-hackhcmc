@@ -33,6 +33,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
 )
+log_mng = LogManager("test.log", level="debug")
 
 @app.post("/upload")
 async def upload(file: UploadFile) -> UploadRes:
@@ -44,7 +45,7 @@ async def upload(file: UploadFile) -> UploadRes:
 
         votes = recognize_siglip_n_dino(img)
         print(votes)
-        lm = ChatGPT()
+        lm = ChatGPT(log_mng)
         ps_prompter = PersonPrompter(lm)
         bg_prompter = BackgroundPrompter(lm)
         bg_ps_prompt_executor = PromptExecutor().add_prompter(bg_prompter).add_prompter(ps_prompter).build()
@@ -61,6 +62,7 @@ async def upload(file: UploadFile) -> UploadRes:
         answer = await bg_ps_prompt_executor.execute(main_img, {"person_images": human_croped_base64_imgs})
         
         drinker_counter = await count_drinkers(answer["person"])
+        print(drinker_counter)
         # posm_detector = PosmDetector()
         # posm_croped_base64_imgs = posm_detector.detect("test_img/0.jpg")
         

@@ -4,7 +4,8 @@ from fastapi.responses import FileResponse
 from fastapi.exceptions import HTTPException
 import numpy as np
 import os
-
+import uuid
+import cv2
 from PIL import Image
 import faiss
 import base64
@@ -59,9 +60,11 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         # posmprompter = POSMPrompter(lm)
         # posm_prompt_executor = PromptExecutor().add_prompter(posmprompter).build()
 
-        buffered = io.BytesIO()
-        img.save(buffered, format="JPEG")
-        main_img = base64.b64encode(buffered.getvalue()).decode("utf-8")
+        uid = uuid.uuid4()
+        main_img_path = os.path.join("services/apis/app/image", f"{uid}.jpg")
+        cv2.imwrite(main_img_path, img)
+        main_img = str(domain) + "image/"  + f"?image_path={uid}.jpg"
+            
         human_detector = HumanDetector()
         human_croped_base64_imgs = human_detector.detect(np.asarray(img))
         

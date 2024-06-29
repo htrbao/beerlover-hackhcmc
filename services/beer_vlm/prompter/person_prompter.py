@@ -26,7 +26,7 @@ Your answer should be in JSON format:
 }
         """
         self.person_prompt = """
-There is a person in the image at {location} location. Answer the type of that person and brand of that person in JSON format.
+There is a person in the image. Answer the type of that person and brand of that person in JSON format.
 """
 
         super(PersonPrompter, self).__init__(lm, system_prompt, name=name)
@@ -65,7 +65,7 @@ There is a person in the image at {location} location. Answer the type of that p
         
     @backoff.on_exception(backoff.expo, exception=Exception,max_time=5, max_tries=2)
     async def _get_answer(self, img, main_image, **results):
-        query_prompt = self.person_prompt.format(location=results.get("background", {}).get("location", ""))
+        query_prompt = self.person_prompt
         answer = await self.lm.query(query_prompt, img, 1, self.system_prompt, main_image=main_image)
         answer = await self.lm.get_response_texts(answer)
         answer = answer[0]

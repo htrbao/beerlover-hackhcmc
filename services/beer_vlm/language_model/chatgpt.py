@@ -87,6 +87,7 @@ class ChatGPT(AbstractLanguageModel):
         :return: Response(s) from the OpenAI model.
         :rtype: Dict
         """
+        start_time = time.monotonic()
         json_format = None
         if "JSON" in query:
             json_format = {"type": "json_object"}
@@ -146,6 +147,7 @@ class ChatGPT(AbstractLanguageModel):
 
         if self.cache:
             self.respone_cache[query] = response
+        print("time: ", time.monotonic()- start_time)
         return response
 
     @backoff.on_exception(backoff.expo, openai.OpenAIError, max_time=10, max_tries=6)

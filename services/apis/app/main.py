@@ -49,10 +49,12 @@ async def upload(file: UploadFile) -> UploadRes:
         lm = ChatGPT()
         ps_prompter = PersonPrompter(lm)
         bg_prompter = BackgroundPrompter(lm)
-        bg_ps_prompt_executor = PromptExecutor().add_prompter(bg_prompter).add_prompter(ps_prompter).build()
+        bg_prompt_executor = PromptExecutor().add_prompter(bg_prompter).build()
+        bs_prompt_executor = PromptExecutor().add_prompter(ps_prompter).build()
         
-        posmprompter = POSMPrompter(lm)
-        posm_prompt_executor = PromptExecutor().add_prompter(posmprompter).build()
+        
+        # posmprompter = POSMPrompter(lm)
+        # posm_prompt_executor = PromptExecutor().add_prompter(posmprompter).build()
 
         buffered = io.BytesIO()
         img.save(buffered, format="JPEG")
@@ -60,9 +62,9 @@ async def upload(file: UploadFile) -> UploadRes:
         human_detector = HumanDetector()
         human_croped_base64_imgs = human_detector.detect(np.asarray(img))
         
-        answer = await bg_ps_prompt_executor.execute(main_img, {"person_images": human_croped_base64_imgs})
-        
-        drinker_counter = await count_drinkers(answer["person"])
+        bg_answer = await bg_prompt_executor.execute(main_img)
+        ps_answer = await bg_prompt_executor.execute(main_img, {"person_images": human_croped_base64_imgs})
+        drinker_counter = await count_drinkers(ps_answer["person"])
         print(drinker_counter)
         # posm_detector = PosmDetector()
         # posm_croped_base64_imgs = posm_detector.detect("test_img/0.jpg")
@@ -72,7 +74,7 @@ async def upload(file: UploadFile) -> UploadRes:
         
 
         return UploadRes(success=True, results={
-            "background": answer["background"],
+            "background": bg_answer["background"],
             "beer_person_infos": drinker_counter
         })
     except Exception as e:

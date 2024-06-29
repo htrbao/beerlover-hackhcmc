@@ -1,0 +1,12 @@
+
+LM_CONFIG = {
+    "gpt-4o" : {
+        "model_id": "gpt-4o",
+        "prompt_token_cost": 0.005,
+        "response_token_cost": 0.015,
+        "high_res_token": 170,
+        "low_res_token": 85,
+        "temperature": 0.6,
+        "max_tokens": 4096
+    }
+}

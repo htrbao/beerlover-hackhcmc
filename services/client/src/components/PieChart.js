@@ -1,8 +1,8 @@
 import { ResponsivePie } from "@nivo/pie";
 
-const PieChart = () => {
+const PieChart = ({beer_distribution}) => {
     // const colors_order = ["hsl(0, 0%, 94%)", "hsl(0, 0%, 82%)", "hsl(210, 4%, 73%)", "hsl(210, 3%, 55%)", "hsl(213, 4%, 43%)"]
-    let data = [
+    beer_distribution = [
         {
             id: "ruby",
             label: "ruby",
@@ -30,14 +30,12 @@ const PieChart = () => {
         },
     ];
 
-    data.sort((a, b) => a.value > b.value)
-
-    console.log(data)
+    beer_distribution.sort((a, b) => a.value > b.value)
 
     return (
         <ResponsivePie
             colors={{ scheme: 'greys' }}
-            data={data}
+            data={beer_distribution}
             margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
             innerRadius={0.5}
             padAngle={0.7}

@@ -1,1 +1,0 @@
-from .voting import VotingRes

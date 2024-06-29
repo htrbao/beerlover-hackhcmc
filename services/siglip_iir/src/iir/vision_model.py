@@ -28,7 +28,6 @@ class SiglipVisionModel(VisionModel):
                 norm = vector.norm(dim=-1, keepdim=True)
                 vector /= norm
                 vector = vector.cpu().detach().numpy().astype("float32")
-                print(vector.shape)
                 return vector
         else:
             raise Exception("Invalid input type")

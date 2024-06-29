@@ -11,4 +11,4 @@ class BottleDetector:
 
     def detect(self, img_path):
         numpy_img = cv2.imread(img_path)
-        results = self.model(numpy_img, save=True, classes=["bottle"])
+        results = self.bottle_model(numpy_img, save=True, classes=[44])

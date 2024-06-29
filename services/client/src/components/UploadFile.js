@@ -38,7 +38,7 @@ const UploadFile = ({setRequestData}) => {
             },
         }).then(res => {
             setImage(URL.createObjectURL(file))
-            setRequestData(res)
+            setRequestData(res.results)
         }).catch(err => {
             console.log(err)
         })

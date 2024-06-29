@@ -16,8 +16,7 @@ class HumanDetector:
         self.model = YOLOv10(model_path)
 
 
-    def detect(self, img):
-        numpy_img = cv2.imread(img)
+    def detect(self, numpy_img):
         results = self.model(numpy_img, classes=POSM_CLASS, conf=0.5, save=True)
         filtered_boxes_v10 = [{"box": box, "class": ID2NAME[int(box.cls)]} for box in results[0].boxes if box.cls in POSM_CLASS]
         croped_imgs = []

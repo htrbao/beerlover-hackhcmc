@@ -20,7 +20,7 @@ const Results = ({
                     style={{ paddingLeft: "20px" }}>
                     <h2>🍾 Can Statistics</h2>
                     <div className="analyzed-results-list">
-                        {beer_can_infos.map((item, index) => (
+                        {beer_can_infos && beer_can_infos.map((item, index) => (
                             <DetectInfo
                                 key={index}
                                 beer_line={""}
@@ -36,7 +36,7 @@ const Results = ({
                     style={{ paddingLeft: "20px" }}>
                     <h2>📦 Carton Statistics</h2>
                     <div className="analyzed-results-list">
-                        {beer_carton_infos.map((item, index) => (
+                        {beer_carton_infos && beer_carton_infos.map((item, index) => (
                             <DetectInfo
                                 key={index}
                                 beer_line={""}
@@ -52,7 +52,7 @@ const Results = ({
                     style={{ paddingLeft: "20px" }}>
                     <h2>👨🏼‍🍳 POSM Statistics</h2>
                     <div className="analyzed-results-list">
-                        {beer_person_infos.map((item, index) => (
+                        {beer_person_infos && beer_person_infos.map((item, index) => (
                             <DetectInfo
                                 key={index}
                                 beer_line={item.beer_line}

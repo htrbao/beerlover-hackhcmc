@@ -24,7 +24,9 @@ class HumanDetector:
         bbox_xyxy = np.array(person_boxes, dtype=np.float32)
         threshold = 0.7
         indices = cv2.dnn.NMSBoxes(bboxes=person_boxes, scores=confidence_scores, score_threshold=0.5, nms_threshold=threshold)
-        filtered_boxes = [bbox_xyxy[i] for i in indices.flatten()]
+        filtered_boxes = []
+        if bbox_xyxy.size != 0:
+            filtered_boxes = [bbox_xyxy[i] for i in indices.flatten()]
         croped_imgs = []
         numpy_img = cv2.cvtColor(numpy_img, cv2.COLOR_RGB2BGR)
         for box in filtered_boxes:

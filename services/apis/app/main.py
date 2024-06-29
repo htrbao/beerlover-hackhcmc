@@ -21,6 +21,7 @@ from services.beer_vlm.utils import encode_image
 
 from services.detector.module.posm_detector import PosmDetector
 from services.detector.module.human_detector import HumanDetector
+from services.detector.module.carton_detector import CartonDetector
 from collections import defaultdict
 import io
 # from .config import settings
@@ -74,6 +75,14 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         bg_answer, ps_answer = await asyncio.gather(bg_task, ps_task)
         drinker_counter = await count_drinkers(ps_answer["person"])
         print(drinker_counter)
+        
+        carton_detector = CartonDetector()
+        carton_croped_base64_imgs = human_detector.detect(np.asarray(img))
+        carton_results = []
+        for carton in carton_croped_base64_imgs:
+            brand = recognize_siglip_n_dino(carton)
+            carton_results.append(brand)
+        carton_counter = await count_carton(carton_results)
         # posm_detector = PosmDetector()
         # posm_croped_base64_imgs = posm_detector.detect("test_img/0.jpg")
         
@@ -83,7 +92,8 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
 
         return UploadRes(success=True, results={
             "background": bg_answer["background"],
-            "beer_person_infos": drinker_counter
+            "beer_person_infos": drinker_counter,
+            "beer_carton_infos": carton_counter,
         })
     except Exception as e:
         print(traceback.format_exc())
@@ -112,4 +122,18 @@ async def count_drinkers(person):
                 "object_type": "Person",
                 "number": v
             })
+    return results
+
+async def count_carton(cartons):
+    counter = defaultdict(int)
+    for c in cartons:
+        counter[c] += 1
+    results = []
+    
+    for brand, v in counter.items():
+        results.append({
+            "brand": brand,
+            "object_type": "Carton",
+            "number": v
+        })
     return results

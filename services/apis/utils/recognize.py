@@ -32,7 +32,7 @@ def recognize_siglip_n_dino(img):
             votes[f"{configs_siglip[i]['beer']}"] += D[0][id] * (id + 1)
         else:
             votes[f"{configs_siglip[i]['beer']}"] = D[0][id] * (id + 1)
-        print(configs_siglip[i], D[0][id])
+        # print(configs_siglip[i], D[0][id])
 
     D, I = index_dino.search(xq_d, 5)
     del xq_d
@@ -44,7 +44,7 @@ def recognize_siglip_n_dino(img):
             votes[f"{configs_dino[i]['beer']}"] += D[0][id] * (id + 1)
         else:
             votes[f"{configs_dino[i]['beer']}"] = D[0][id] * (id + 1)
-        print(configs_dino[i], D[0][id])
+        # print(configs_dino[i], D[0][id])
 
     D, I = index_beit3.search(xq_b, 5)
     del xq_b
@@ -56,7 +56,7 @@ def recognize_siglip_n_dino(img):
             votes[f"{configs_beit3[i]['beer']}"] += D[0][id] * (id + 1)
         else:
             votes[f"{configs_beit3[i]['beer']}"] = D[0][id] * (id + 1)
-        print(configs_beit3[i], D[0][id])
+        # print(configs_beit3[i], D[0][id])
 
     predict_class = None
     for k, v in votes.items():

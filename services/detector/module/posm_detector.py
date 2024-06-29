@@ -14,7 +14,7 @@ POSM_CLASS = [3, 5, 6, 8, 9, 12, 15,17,19]
 ID2NAME = {3: 'billboard', 5: 'bucket', 6: 'campain-objects', 8: 'display-stand', 9: 'fridge', 12: 'parasol', 15: 'signage', 17: 'standee', 19: 'tent-card'}
 
 class PosmDetector:
-    def __init__(self, model_path = "weights/posm.pt", billboard_model_path = "weights/billboard_yolov10s.pt"):
+    def __init__(self, model_path = "weights/posm.pt", billboard_model_path = "weights/posm.pt"):
         self.log_mng = LogManager("test.log", level="debug")
         self.model = YOLOv10(model_path)
         # self.billboard_model = YOLOv10(billboard_model_path)

@@ -8,6 +8,7 @@ const Results = ({
     beer_can_infos,
     beer_carton_infos,
     beer_person_infos,
+    beer_posm_infos,
     background,
 }) => {
     console.log(beer_can_infos)
@@ -50,12 +51,28 @@ const Results = ({
                 <div
                     className="analyzed-result-container"
                     style={{ paddingLeft: "20px" }}>
-                    <h2>👨🏼‍🍳 POSM Statistics</h2>
+                    <h2>👫 People Statistics</h2>
                     <div className="analyzed-results-list">
                         {beer_person_infos && beer_person_infos.map((item, index) => (
                             <DetectInfo
                                 key={index}
                                 beer_line={item.beer_line}
+                                brand={item.brand}
+                                object_type={item.object_type}
+                                number={item.number}
+                            />
+                        ))}
+                    </div>
+                </div>
+                <div
+                    className="analyzed-result-container"
+                    style={{ paddingLeft: "20px" }}>
+                    <h2>♺ POSM Statistics</h2>
+                    <div className="analyzed-results-list">
+                        {beer_posm_infos && beer_posm_infos.map((item, index) => (
+                            <DetectInfo
+                                key={index}
+                                beer_line={""}
                                 brand={item.brand}
                                 object_type={item.object_type}
                                 number={item.number}

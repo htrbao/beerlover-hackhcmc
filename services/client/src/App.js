@@ -16,7 +16,7 @@ function App() {
                 brand: "Heineken Silver",
                 object_type: "Can",
                 number: 10,
-            }
+            },
         ],
         beer_carton_infos: [
             {
@@ -44,17 +44,39 @@ function App() {
                 number: 10,
             },
         ],
+        beer_posm_infos: [
+            {
+                brand: "Heineken 0.0",
+                beer_line: "",
+                object_type: "Billboard",
+                number: 10,
+            },
+            {
+                brand: "Heineken Silver",
+                beer_line: "",
+                object_type: "Billboard",
+                number: 10,
+            },
+        ],
         background: {
-            'location': 'street restaurant', 
-            'activity': 'dining', 
-            'atmosphere': ['casual', 'welcoming', 'bustling'], 
-            'emotion': ['relaxed', 'social', 'content']
-        }
-    })
+            location: "street restaurant",
+            activity: "dining",
+            atmosphere: ["casual", "welcoming", "bustling"],
+            emotion: ["relaxed", "social", "content"],
+        },
+    });
     return (
         <div>
-            <UploadFile setRequestData={setRequestData}/>
-			{requestData && <Results beer_can_infos={requestData.beer_can_infos} beer_carton_infos={requestData.beer_carton_infos} beer_person_infos={requestData.beer_person_infos} background={requestData.background}/>}
+            <UploadFile setRequestData={setRequestData} />
+            {requestData && (
+                <Results
+                    beer_can_infos={requestData.beer_can_infos}
+                    beer_carton_infos={requestData.beer_carton_infos}
+                    beer_person_infos={requestData.beer_person_infos}
+                    beer_posm_infos={requestData.beer_posm_infos}
+                    background={requestData.background}
+                />
+            )}
         </div>
     );
 }

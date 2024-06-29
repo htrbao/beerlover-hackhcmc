@@ -15,8 +15,7 @@ class HumanDetector:
         
         self.model = YOLOv10(model_path)
 
-    def detect(self, img):
-        numpy_img = cv2.imread(img)
+    def detect(self, numpy_img):
         results = self.model(source=numpy_img, conf=0.5)
         person_boxes = [box.xyxy[0].cpu().numpy() for box in results[0].boxes if box.cls == 0]
         confidence_scores = [box.conf[0].cpu().numpy() for box in results[0].boxes if box.cls == 0]

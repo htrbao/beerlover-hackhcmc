@@ -74,6 +74,7 @@ class Beit3VisionModel:
                 vector, _ = self.model(image=image_input, only_infer=True)
                 norm = vector.norm(dim=-1, keepdim=True)
                 vector /= norm
+                vector = vector.cpu().detach().numpy().astype("float32")
                 return vector
         else:
             raise Exception("Invalid input type")

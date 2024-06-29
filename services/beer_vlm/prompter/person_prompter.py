@@ -3,8 +3,8 @@ import json
 import asyncio
 from typing import Optional
 
-from beer_vlm.logger import LogManager
-from beer_vlm.language_model import AbstractLanguageModel
+from services.beer_vlm.logger import LogManager
+from services.beer_vlm.language_model import AbstractLanguageModel
 from .abstract_prompter import AbstractPrompter
 
 

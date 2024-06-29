@@ -1,5 +1,6 @@
 from typing import Any, List, Optional
 from .abstract_prompter import AbstractPrompter
+import time
 
 
 class PromptExecutor(object):
@@ -16,7 +17,7 @@ class PromptExecutor(object):
         check_list = set()
         assert len(self.prompters), "length of prompters should be greater than 0"
         
-        assert self.prompters[-1].name == "final", "Final prompter always at the end of the list"
+        # assert self.prompters[-1].name == "final", "Final prompter always at the end of the list"
         for prompter in self.prompters:
             assert prompter.require_prompters().issubset(check_list), f"{prompter.name} prompter do not meet the requirements"
             check_list.add(prompter.name)
@@ -26,10 +27,12 @@ class PromptExecutor(object):
         :param image: base64 encoded image
         :type: str
         """
+        start_time = time.monotonic()
         if results is None:
             results = dict()
         for prompter in self.prompters:
             results[prompter.name] = await prompter.query(image, **results)
+        print('time: ', time.monotonic() - start_time)
         
         return results
         

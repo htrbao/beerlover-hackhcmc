@@ -18,8 +18,8 @@ from openai import AsyncOpenAI
 from typing import List, Dict, Union, Optional
 
 from .abstract_language_model import AbstractLanguageModel
-from beer_vlm.configs import OPENAI_API_KEY, ORGANIZATION_KEY
-from beer_vlm.logger import LogManager
+from services.beer_vlm.configs import OPENAI_API_KEY, ORGANIZATION_KEY
+from services.beer_vlm.logger import LogManager
 
 
 class ChatGPT(AbstractLanguageModel):

@@ -96,12 +96,6 @@ const Results = ({beer_infos, beer_distribution}) => {
             object_type: "Can",
             number: 10,
         },
-        {
-            brand: "Heineken",
-            beer_line: "Silver",
-            object_type: "Can",
-            number: 10,
-        },
     ];
     return (
         <div className="results-container">
@@ -112,7 +106,6 @@ const Results = ({beer_infos, beer_distribution}) => {
                         <DetectInfo
                             key={index}
                             brand={item.brand}
-                            beer_line={item.beer_line}
                             object_type={item.object_type}
                             number={item.number}
                         />
@@ -126,9 +119,9 @@ const Results = ({beer_infos, beer_distribution}) => {
                     <PieChart beer_distribution={beer_distribution}/>
                 </div>
             </div>
-            <p>
-                hahahaha
-            </p>
+            <div className="analyzed-result-container">
+                <h1>Background</h1>
+            </div>
         </div>
     );
 };

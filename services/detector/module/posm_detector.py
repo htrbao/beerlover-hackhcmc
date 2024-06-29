@@ -26,6 +26,7 @@ class PosmDetector:
         # billboard_results = [{"box": box, "class": "billboard"} for box in billboard_results[0].boxes]
         # filtered_boxes_v10.extend(billboard_results)
         croped_imgs = []
+        numpy_img = cv2.cvtColor(numpy_img, cv2.COLOR_RGB2BGR)
         for box in filtered_boxes_v10:
             xyxy = list(map(int, box['box'].xyxy.view(-1).tolist()))
             croped_img = numpy_img[xyxy[1]:xyxy[3], xyxy[0]:xyxy[2]]

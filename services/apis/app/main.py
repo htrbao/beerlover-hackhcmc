@@ -62,7 +62,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
 
         uid = uuid.uuid4()
         main_img_path = os.path.join("services/apis/app/image", f"{uid}.jpg")
-        cv2.imwrite(main_img_path, img)
+        img.save(main_img_path)
         main_img = str(domain) + "image/"  + f"?image_path={uid}.jpg"
             
         human_detector = HumanDetector()

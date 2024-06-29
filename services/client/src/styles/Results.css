@@ -2,6 +2,8 @@
     width: 100%;
     height: 100%;
 
+    padding-top: 5px;
+
     background-color: #f8f8f8;
 }
 
@@ -12,11 +14,13 @@
 .analyzed-results-list {
     width: 100%;
     display: flex;
+    justify-content: center;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     overflow-x: scroll;
     gap: 25px;
     margin: 10px 10px 0 20px;
+    padding-bottom: 50px;
 }
 
 .distribution-list {

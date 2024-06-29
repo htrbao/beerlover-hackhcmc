@@ -4,6 +4,8 @@ import cv2
 import base64
 import io
 import numpy as np
+import os
+
 
 POSM_CLASS = [0]
 ID2NAME = {0: 'person'}
@@ -27,11 +29,12 @@ class HumanDetector:
             xyxy = list(map(int, box))
             croped_imgs.append(numpy_img[xyxy[1]:xyxy[3], xyxy[0]:xyxy[2]])
         croped_base64_imgs = []
-        for img in croped_imgs:
-            img = Image.fromarray(img)
+        for _img in croped_imgs:
+            _img = Image.fromarray(_img)
             buffered = io.BytesIO()
-            img.save(buffered, format="JPEG")
+            _img.save(buffered, format="JPEG")
             img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
             croped_base64_imgs.append(img_str)
+
         return croped_base64_imgs
 

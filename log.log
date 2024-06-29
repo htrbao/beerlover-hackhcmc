@@ -1,0 +1,18 @@
+Log file path: ./log/test.log
+
+0: 448x640 11 persons, 1 car, 1 motorcycle, 1 bottle, 2 cups, 1 bowl, 6 chairs, 1 dining table, 317.3ms
+Speed: 3.1ms preprocess, 317.3ms inference, 0.8ms postprocess per image at shape (1, 3, 448, 640)
+Results saved to [1m/Users/lap14888/Documents/beerlover-hackhcmc/runs/detect/predict9[0m
+0.011049999999999999
+0.021249999999999998
+0.032375
+0.04344
+0.054505
+0.06557
+0.07662000000000001
+0.08938499999999999
+0.10045
+0.11321500000000001
+0.12256500000000001
+time:  57.4877225
+[{'type': 'Drinker', 'brand': 'Tiger Crystal'}, {'type': 'Drinker', 'brand': 'Tiger Crystal'}, {'type': 'Drinker', 'brand': 'Tiger Crystal'}, {'type': 'Drinker', 'brand': 'Tiger Lager'}, {'type': 'Promotion', 'brand': 'Tiger Lager'}, {'type': 'Drinker', 'brand': 'Tiger Lager'}, {'type': 'Drinker', 'brand': '333'}, {'type': 'Staff', 'brand': 'Not drinking'}, {'type': 'Drinker', 'brand': 'Tiger Soju Infused Lager'}, {'type': 'Drinker', 'brand': 'Tiger Lager'}, {'type': 'Promotion', 'brand': 'Tiger Lager'}]

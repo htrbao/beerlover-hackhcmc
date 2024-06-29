@@ -5,7 +5,7 @@ import ProgressBar from './ProgressBar';
 import DropArea from './DropArea';
 import '../styles/UploadFile.css';
 
-function UploadFile() {
+const UploadFile = ({setRequestData}) => {
     const [fileName, setFileName] = useState()
     const [image, setImage] = useState()
     const [progressBar, setProgressBar] = useState(0)
@@ -38,7 +38,7 @@ function UploadFile() {
             },
         }).then(res => {
             setImage(URL.createObjectURL(file))
-            console.log(res)
+            setRequestData(res)
         }).catch(err => {
             console.log(err)
         })

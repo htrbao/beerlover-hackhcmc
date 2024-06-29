@@ -1,2 +1,4 @@
+weights
 *.pt
 runs
+log

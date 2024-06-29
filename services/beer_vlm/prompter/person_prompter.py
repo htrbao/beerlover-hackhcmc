@@ -3,8 +3,8 @@ import json
 import asyncio
 from typing import Optional
 
-from beer_vlm.logger import LogManager
-from beer_vlm.language_model import AbstractLanguageModel
+from services.beer_vlm.logger import LogManager
+from services.beer_vlm.language_model import AbstractLanguageModel
 from .abstract_prompter import AbstractPrompter
 
 
@@ -14,14 +14,14 @@ class PersonPrompter(AbstractPrompter):
 You are expert in identifying the type of the person appearing in the image knowing its location.
 All of your answer should be based on the image do not make up anything.
 
-You only need to be choose a single type of person from this list of type: Promotion, Buyer, Seller, Drinker.
+You only need to be choose a single type of person from this list of type: Promotion, Buyer, Seller, Drinker, Staff.
 
-If that person is Promotion or Drinker you will be choose the brand of the used or promoted beer from this list of beer brands: Heineken 0.0, Heineken Silver, Heineken Sleek, Tiger Lager, Tiger Crystal, Tiger Platinum Wheat Lager, Tiger Soju Infused Lager, Edelweiss, Strongbow, Larue, Larue Smooth, Larue Special, Bia Việt, Bivina Lager, Bivina Export, Sài gòn, Hà nội, 333, Huda, Trúc Bạch, Budweiser. Otherwise, just answer that "unknown".
+If that person is Promotion or Drinker you will be choose the brand of the used or promoted beer from this list of beer brands: Heineken 0.0, Heineken Silver, Heineken Sleek, Tiger Lager, Tiger Crystal, Tiger Platinum Wheat Lager, Tiger Soju Infused Lager, Edelweiss, Strongbow, Larue, Larue Smooth, Larue Special, Bia Việt, Bivina Lager, Bivina Export, Sài gòn, Hà nội, 333, Huda, Trúc Bạch, Budweiser. Otherwise, just answer that brand is "Other beverage" or "Not drinking".
 
 Your answer should be in JSON format:
 {
     "type": "the type of that person",
-    "brand": "brand if possible else unknown"
+    "brand": "brand if possible else other beverage"
 }
         """
         self.person_prompt = """
@@ -37,11 +37,11 @@ There is a person in the image at {location} location. Answer the type of that p
     
     async def default_person(self):
         return {
-            "type": "customer",
-            "brand": "unknown",
+            "type": "Customer",
+            "brand": "Other beverage",
         }
     
-    async def person_prompt_prepare(self, type="customer", brand="unknown"):
+    async def person_prompt_prepare(self, type="Customer", brand="other beverage"):
         return f"image of a {type} with {brand}"
     
     @backoff.on_exception(backoff.expo, exception=Exception,max_time=5, max_tries=2)

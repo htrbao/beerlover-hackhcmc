@@ -18,8 +18,7 @@ class PosmDetector:
         self.model = YOLOv10(model_path)
         # self.billboard_model = YOLOv10(billboard_model_path)
 
-    def detect(self, img):
-        numpy_img = cv2.imread(img)
+    def detect(self, numpy_img):
         results = self.model(numpy_img)
         # billboard_results = self.billboard_model(numpy_img, save=True)
         filtered_boxes_v10 = [{"box": box, "class": ID2NAME[int(box.cls)]} for box in results[0].boxes if box.cls in POSM_CLASS]

@@ -25,7 +25,7 @@ class PosmDetector:
 
     async def detect(self, img):
         numpy_img = cv2.imread(img)
-        results = self.model(numpy_img)
+        results = self.model(numpy_img, save=True)
         # billboard_results = self.billboard_model(numpy_img, save=True)
         filtered_boxes_v10 = [{"box": box, "class": ID2NAME[int(box.cls)]} for box in results[0].boxes if box.cls in POSM_CLASS]
         # billboard_results = [{"box": box, "class": "billboard"} for box in billboard_results[0].boxes]

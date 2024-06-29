@@ -62,8 +62,8 @@ async def upload(file: UploadFile) -> UploadRes:
         human_detector = HumanDetector()
         human_croped_base64_imgs = human_detector.detect(np.asarray(img))
         
-        bg_task = await bg_prompt_executor.execute(main_img)
-        ps_task = await bs_prompt_executor.execute(main_img, {"person_images": human_croped_base64_imgs})
+        bg_task = bg_prompt_executor.execute(main_img)
+        ps_task = bs_prompt_executor.execute(main_img, {"person_images": human_croped_base64_imgs})
         
         bg_answer, ps_answer = await asyncio.gather(bg_task, ps_task)
         drinker_counter = await count_drinkers(ps_answer["person"])

@@ -9,16 +9,22 @@ POSM_CLASS = [0]
 ID2NAME = {0: 'person'}
 
 class HumanDetector:
-    def __init__(self, model_path = ""):
+    def __init__(self, model_path = "/home/khoi/Data/YOLO_v10/yolov10/content/best.pt"):
         self.model = YOLOv10(model_path)
 
-    def detect_for_prompter(self, img):
+    def detect(self, img):
         numpy_img = cv2.imread(img)
-        results = self.model(numpy_img)
-        filtered_boxes_v10 = [{"box": box, "class": ID2NAME[int(box.cls)]} for box in results[0].boxes if box.cls in POSM_CLASS]
+        results = self.model(source=numpy_img, conf=0.5)
+        person_boxes = [box.xyxy[0].cpu().numpy() for box in results[0].boxes if box.cls == 0]
+        confidence_scores = [box.conf[0].cpu().numpy() for box in results[0].boxes if box.cls == 0]
+        confidence_scores = np.array(confidence_scores, dtype=np.float32)
+        bbox_xyxy = np.array(person_boxes, dtype=np.float32)
+        threshold = 0.7
+        indices = cv2.dnn.NMSBoxes(bboxes=person_boxes, scores=confidence_scores, score_threshold=0.5, nms_threshold=threshold)
+        filtered_boxes = [bbox_xyxy[i] for i in indices.flatten()]
         croped_imgs = []
-        for box in filtered_boxes_v10:
-            xyxy = list(map(int, box['box'].xyxy.view(-1).tolist()))
+        for box in filtered_boxes:
+            xyxy = list(map(int, box))
             croped_imgs.append(numpy_img[xyxy[1]:xyxy[3], xyxy[0]:xyxy[2]])
         croped_base64_imgs = []
         for img in croped_imgs:

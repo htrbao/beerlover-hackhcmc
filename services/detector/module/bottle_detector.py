@@ -5,8 +5,10 @@ import base64
 import io
 
 class BottleDetector:
-    def __init__(self, model_path = "weights/posm.pt"):
-        self.model = YOLOv10(model_path)
+    def __init__(self, bottle_model_path = "weights/yolov10b.pt", can_model_path = "weights/posm.pt"):
+        self.bottle_model = YOLOv10(bottle_model_path)
+        self.can_model = YOLOv10(can_model_path)
 
     def detect(self, img_path):
-        pass
+        numpy_img = cv2.imread(img_path)
+        results = self.model(numpy_img, save=True, classes=["bottle"])

@@ -37,8 +37,9 @@ const UploadFile = ({setRequestData}) => {
                 setProgressBar(percent)
             },
         }).then(res => {
+            console.log(res)
             setImage(URL.createObjectURL(file))
-            setRequestData(res.results)
+            setRequestData(res.data.results)
         }).catch(err => {
             console.log(err)
         })

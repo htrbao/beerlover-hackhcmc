@@ -22,39 +22,45 @@ def recognize_siglip_n_dino(img):
     xq_d = model_dino.get_embedding(img)
     xq_b = model_beit3.get_embedding(img)
 
-    print("Run SigLIP")
     D, I = index_siglip.search(xq_s, 5)
     del xq_s
 
     for id, i in enumerate(I[0]):
+        if D[0][id] < 0.45:
+            continue
         if configs_siglip[i]['beer'] in votes.keys():
             votes[f"{configs_siglip[i]['beer']}"] += D[0][id] * (id + 1)
         else:
             votes[f"{configs_siglip[i]['beer']}"] = D[0][id] * (id + 1)
         print(configs_siglip[i], D[0][id])
 
-    print("Run Dino")
     D, I = index_dino.search(xq_d, 5)
     del xq_d
 
     for id, i in enumerate(I[0]):
+        if D[0][id] < 0.45:
+            continue
         if configs_dino[i]['beer'] in votes.keys():
             votes[f"{configs_dino[i]['beer']}"] += D[0][id] * (id + 1)
         else:
             votes[f"{configs_dino[i]['beer']}"] = D[0][id] * (id + 1)
         print(configs_dino[i], D[0][id])
 
-    print("Run BEiT3")
     D, I = index_beit3.search(xq_b, 5)
     del xq_b
 
     for id, i in enumerate(I[0]):
+        if D[0][id] < 0.45:
+            continue
         if configs_beit3[i]['beer'] in votes.keys():
             votes[f"{configs_beit3[i]['beer']}"] += D[0][id] * (id + 1)
         else:
             votes[f"{configs_beit3[i]['beer']}"] = D[0][id] * (id + 1)
         print(configs_beit3[i], D[0][id])
 
-    print(votes)
+    predict_class = None
+    for k, v in votes.items():
+        if predict_class is None or v > votes[predict_class]:
+            predict_class = k
 
-    return votes
+    return predict_class

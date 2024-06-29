@@ -64,8 +64,8 @@ Answer the location, atmosphere, emotion and activity of image in JSON format.
         answer["prompt"] = await self.background_prompt_prepare(**answer)
         return answer
     async def query(self, image: Optional[str], **results) -> str:
-        return await self.handle_background(image, **results)
-        # try:
-        #     return await self.handle_background(image, **results)
-        # except:
-        #     return await self.default_background()
+        # return await self.handle_background(image, **results)
+        try:
+            return await self.handle_background(image, **results)
+        except:
+            return await self.default_background()

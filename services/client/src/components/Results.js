@@ -4,8 +4,8 @@ import PieChart from "./PieChart";
 
 import "../styles/Results.css";
 
-const Results = () => {
-    let beer_infos = [
+const Results = ({beer_infos, beer_distribution}) => {
+    beer_infos = [
         {
             brand: "Heineken",
             beer_line: "Silver",
@@ -122,8 +122,8 @@ const Results = () => {
             <div className="analyzed-result-container" style={{ height: 400 }}>
                 <h1>Distributions</h1>
                 <div className="distribution-list" style={{ height: 400 }}>
-                    <PieChart />
-                    <PieChart />
+                    <PieChart beer_distribution={beer_distribution}/>
+                    <PieChart beer_distribution={beer_distribution}/>
                 </div>
             </div>
         </div>

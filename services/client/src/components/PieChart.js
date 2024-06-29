@@ -1,34 +1,45 @@
 import { ResponsivePie } from "@nivo/pie";
 
-const PieChart = ({beer_distribution}) => {
+const PieChart = ({beer_infos}) => {
+    console.log(beer_infos)
     // const colors_order = ["hsl(0, 0%, 94%)", "hsl(0, 0%, 82%)", "hsl(210, 4%, 73%)", "hsl(210, 3%, 55%)", "hsl(213, 4%, 43%)"]
-    beer_distribution = [
-        {
-            id: "ruby",
-            label: "ruby",
-            value: 391,
-        },
-        {
-            id: "haskell",
-            label: "haskell",
-            value: 447,
-        },
-        {
-            id: "rust",
-            label: "rust",
-            value: 105,
-        },
-        {
-            id: "scala",
-            label: "scala",
-            value: 560,
-        },
-        {
-            id: "sass",
-            label: "sass",
-            value: 364,
-        },
-    ];
+    // beer_distribution = [
+    //     {
+    //         id: "ruby",
+    //         label: "ruby",
+    //         value: 391,
+    //     },
+    //     {
+    //         id: "haskell",
+    //         label: "haskell",
+    //         value: 447,
+    //     },
+    //     {
+    //         id: "rust",
+    //         label: "rust",
+    //         value: 105,
+    //     },
+    //     {
+    //         id: "scala",
+    //         label: "scala",
+    //         value: 560,
+    //     },
+    //     {
+    //         id: "sass",
+    //         label: "sass",
+    //         value: 364,
+    //     },
+    // ];
+
+    let beer_distribution = []
+
+    for (let i = 0; i < beer_infos.length; i++) { 
+        beer_distribution.push({
+            id: beer_infos[i].brand,
+            label: beer_infos[i].brand,
+            value: beer_infos[i].number,
+        })
+    }
 
     beer_distribution.sort((a, b) => a.value > b.value)
 

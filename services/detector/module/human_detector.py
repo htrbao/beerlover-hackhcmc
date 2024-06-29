@@ -25,7 +25,7 @@ class HumanDetector:
 
     async def detect_for_prompter(self, img):
         numpy_img = cv2.imread(img)
-        results = self.model(numpy_img, classes=POSM_CLASS, conf=0.5)
+        results = self.model(numpy_img, classes=POSM_CLASS, conf=0.5, save=True)
         filtered_boxes_v10 = [{"box": box, "class": ID2NAME[int(box.cls)]} for box in results[0].boxes if box.cls in POSM_CLASS]
         croped_imgs = []
         for box in filtered_boxes_v10:

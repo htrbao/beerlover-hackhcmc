@@ -18,6 +18,7 @@ from services.beer_vlm.utils import encode_image
 
 from services.detector.module.posm_detector import PosmDetector
 from services.detector.module.human_detector import HumanDetector
+from collections import defaultdict
 import io
 # from .config import settings
 from .dtos import UploadRes
@@ -36,6 +37,9 @@ app.add_middleware(
 @app.post("/upload")
 async def upload(file: UploadFile) -> UploadRes:
     try:
+        beer_can_infos =[]
+        beer_carton_infos =[]
+        beer_person_infos =[]
         img = Image.open(file.file).convert("RGB")
 
         votes = recognize_siglip_n_dino(img)
@@ -55,7 +59,8 @@ async def upload(file: UploadFile) -> UploadRes:
         human_croped_base64_imgs = human_detector.detect(np.asarray(img))
         
         answer = await bg_ps_prompt_executor.execute(main_img, {"person_images": human_croped_base64_imgs})
-        print(answer)
+        
+        drinker_counter = await count_drinkers(answer["person"])
         # posm_detector = PosmDetector()
         # posm_croped_base64_imgs = posm_detector.detect("test_img/0.jpg")
         
@@ -65,10 +70,25 @@ async def upload(file: UploadFile) -> UploadRes:
 
         return UploadRes(success=True, results={
             "background": answer["background"],
-            "person": answer["person"]
+            "beer_person_infos": drinker_counter
         })
     except Exception as e:
         print(traceback.format_exc())
         return UploadRes(success=False, results={"message": str(e)})
 
-
+# problem 1 counting drinker
+async def count_drinkers(person):
+    counter = defaultdict(lambda: defaultdict(int))
+    for p in person:
+        counter[p["type"]][p["brand"]] += 1
+    results = []
+    
+    for type, brand in counter.items():
+        for k, v in brand.items():
+            results.append({
+                "brand": type,
+                "beer_line": k,
+                "object_type": "Person",
+                "number": v
+            })
+    return results

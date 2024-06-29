@@ -29,5 +29,3 @@ class HumanDetector:
             croped_base64_imgs.append(img_str)
         return croped_base64_imgs
 
-test = HumanDetector()
-test.detect_for_prompter("/home/khoi/Data/YOLO_v10/yolov10/output_datatest/roi_3.jpg")

@@ -13,8 +13,6 @@ from .dtos import UploadRes
 from ..utils import recognize_siglip_n_dino
 
 app = FastAPI()
-model_siglip = SiglipVisionModel(device="cpu")
-model_dino = DinoVisionModel(device="cpu")
 
 app.add_middleware(
     CORSMiddleware,

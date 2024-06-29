@@ -4,6 +4,7 @@ import cv2
 import base64
 import io
 import numpy as np
+import uuid
 import os
 from services.beer_vlm.language_model import ChatGPT
 from services.beer_vlm.prompter import *
@@ -27,13 +28,17 @@ class PosmDetector:
         croped_imgs = []
         for box in filtered_boxes_v10:
             xyxy = list(map(int, box['box'].xyxy.view(-1).tolist()))
-            croped_imgs.append(numpy_img[xyxy[1]:xyxy[3], xyxy[0]:xyxy[2]])
-        croped_base64_imgs = []
-        for img in croped_imgs:
-            img = Image.fromarray(img)
-            buffered = io.BytesIO()
-            img.save(buffered, format="JPEG")
-            img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
-            croped_base64_imgs.append(img_str)
+            croped_img = numpy_img[xyxy[1]:xyxy[3], xyxy[0]:xyxy[2]]
+            uid = uuid.uuid4()
+            croped_path = os.path.join("services/apis/app/image", f"{uid}.jpg")
+            cv2.imwrite(croped_path, croped_img)
+            croped_imgs.append(f"?image_path={uid}.jpg")
+        # croped_base64_imgs = []
+        # for img in croped_imgs:
+        #     img = Image.fromarray(img)
+        #     buffered = io.BytesIO()
+        #     img.save(buffered, format="JPEG")
+        #     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+        #     croped_base64_imgs.append(img_str)
         
-        return croped_base64_imgs
+        return croped_imgs

@@ -1,7 +1,9 @@
-from fastapi import FastAPI, Depends, UploadFile
+from fastapi import FastAPI, Depends, UploadFile, Request
 from fastapi.middleware.cors import CORSMiddleware
-
+from fastapi.responses import FileResponse
+from fastapi.exceptions import HTTPException
 import numpy as np
+import os
 
 from PIL import Image
 import faiss
@@ -36,9 +38,10 @@ app.add_middleware(
 # log_mng = LogManager("test.log", level="debug")
 
 @app.post("/upload")
-async def upload(file: UploadFile) -> UploadRes:
+async def upload(file: UploadFile, request: Request) -> UploadRes:
     # global log_mng
     try:
+        domain = request.base_url
         beer_can_infos =[]
         beer_carton_infos =[]
         beer_person_infos =[]
@@ -62,9 +65,9 @@ async def upload(file: UploadFile) -> UploadRes:
         human_detector = HumanDetector()
         human_croped_base64_imgs = human_detector.detect(np.asarray(img))
         
+        print([str(domain) + "image/" +_img for _img in human_croped_base64_imgs])
         bg_task = bg_prompt_executor.execute(main_img)
-        ps_task = bs_prompt_executor.execute(main_img, {"person_images": human_croped_base64_imgs})
-        
+        ps_task = bs_prompt_executor.execute(main_img, {"person_images": [str(domain) + "image/" +_img for _img in human_croped_base64_imgs]})
         bg_answer, ps_answer = await asyncio.gather(bg_task, ps_task)
         drinker_counter = await count_drinkers(ps_answer["person"])
         print(drinker_counter)
@@ -82,7 +85,15 @@ async def upload(file: UploadFile) -> UploadRes:
     except Exception as e:
         print(traceback.format_exc())
         return UploadRes(success=False, results={"message": str(e)})
-
+    
+@app.get("/image/")
+async def get_image(image_path: str):
+    image_path = os.path.join("services/apis/app/image", image_path)
+    if os.path.exists(image_path) and os.path.isfile(image_path):
+        return FileResponse(image_path, media_type="image/jpeg")
+    else:
+        raise HTTPException(status_code=404, detail="Image not found")
+    
 # problem 1 counting drinker
 async def count_drinkers(person):
     counter = defaultdict(lambda: defaultdict(int))

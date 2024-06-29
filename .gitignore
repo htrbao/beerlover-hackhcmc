@@ -2,3 +2,4 @@ weights
 *.pt
 runs
 log
+services/apis/app/image

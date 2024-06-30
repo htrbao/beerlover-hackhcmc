@@ -54,10 +54,11 @@ There is a POSM in the image. Answer the brand of that POSM in JSON format.
         return answers
     
     async def get_answer(self, img, **results):
-        # answer = await self._get_answer(img, **results)
+        answer = await self._get_answer(img, **results)
         try:
             answer = await self._get_answer(img, **results)
-        except:
+        except Exception as e:
+            print(e)
             answer = await self.default_posm()
         return answer
         
@@ -77,5 +78,6 @@ There is a POSM in the image. Answer the brand of that POSM in JSON format.
             return []
         try:
             return await self.handle_posm(posm_imgs, **results)
-        except:
+        except Exception as e:
+            print(e)
             return [await self.default_posm()] * len(posm_imgs)

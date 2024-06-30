@@ -94,7 +94,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         bottle_counter = await count_objects(bottle_results, type="Can")
         
         posm_detector = PosmDetector()
-        posm_croped_base64_imgs, label_imgs = posm_detector.detect("test_img/0.jpg")
+        posm_croped_base64_imgs, label_imgs = posm_detector.detect(np.asarray(img))
         
         posm_labels = await posm_prompt_executor.execute(None, {"posm_images": posm_croped_base64_imgs})
         posm_labels = posm_labels["posm"]

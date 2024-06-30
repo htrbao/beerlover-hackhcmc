@@ -74,7 +74,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         bg_answer, ps_answer = await asyncio.gather(bg_task, ps_task)
         for bbox, brand in zip(human_bbox, ps_answer["person"]):
             tmp = {}
-            tmp["box"] = bbox
+            tmp["box"] = list(map(int, bbox.xyxy.view(-1).tolist()))
             tmp['class'] = "Person" + "_" + brand['brand'] + brand['type']
             final_bbox.append(tmp)
         drinker_counter = await count_drinkers(ps_answer["person"])

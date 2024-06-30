@@ -57,8 +57,8 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         bs_prompt_executor = PromptExecutor().add_prompter(ps_prompter).build()
         
         
-        # posmprompter = POSMPrompter(lm)
-        # posm_prompt_executor = PromptExecutor().add_prompter(posmprompter).build()
+        posmprompter = POSMPrompter(lm)
+        posm_prompt_executor = PromptExecutor().add_prompter(posmprompter).build()
 
         uid = uuid.uuid4()
         main_img_path = os.path.join("services/apis/app/image", f"{uid}.jpg")
@@ -82,7 +82,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         for carton in carton_croped_base64_imgs:
             brand = recognize_siglip_n_dino(carton)
             carton_results.append(brand)
-        carton_counter = await count_objects(carton_results, type="Carton")
+        carton_counter, is_10beer = await count_objects(carton_results, type="Carton")
         
         # bottle detect
         bottle_detector = BottleDetector()
@@ -93,18 +93,21 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             bottle_results.append(brand)
         bottle_counter = await count_objects(bottle_results, type="Can")
         
-        # posm_detector = PosmDetector()
-        # posm_croped_base64_imgs = posm_detector.detect("test_img/0.jpg")
+        posm_detector = PosmDetector()
+        posm_croped_base64_imgs, label_imgs = posm_detector.detect("test_img/0.jpg")
         
-        # posm_labels = await posm_prompt_executor.execute(None, {"posm_images": posm_croped_base64_imgs})
-        # posm_labels = posm_labels["posm"]
+        posm_labels = await posm_prompt_executor.execute(None, {"posm_images": posm_croped_base64_imgs})
+        posm_labels = posm_labels["posm"]
+        posm_counter, is_appear = await count_posm(posm_labels, label_imgs)
         
+        heineken_presence = is_appear and is_10beer
 
         return UploadRes(success=True, results={
             "background": bg_answer["background"],
             "beer_person_infos": drinker_counter,
             "beer_carton_infos": carton_counter,
-            "beer_can_infos": bottle_counter
+            "beer_can_infos": bottle_counter,
+            "beer_posm_infos": posm_counter
         })
     except Exception as e:
         print(traceback.format_exc())
@@ -136,15 +139,41 @@ async def count_drinkers(person):
     return results
 
 async def count_objects(objects, type):
+    heineken_beer = ["Heineken 0.0", "Heineken Silver", "Heineken Sleek", "Tiger Lager", "Tiger Crystal", "Tiger Platinum Wheat Lager", "Tiger Soju Infused Lager", "Edelweiss", "Strongbow", "Larue", "Larue Smooth", "Larue Special", "Bia Việt", "Bivina Lager", "Bivina Export"]
+    is_10beer = False
     counter = defaultdict(int)
     for c in objects:
         counter[c] += 1
     results = []
     
     for brand, v in counter.items():
+        if type == "Carton" and brand in heineken_beer and v >= 10:
+            is_10beer = True
         results.append({
             "brand": brand,
             "object_type": type,
             "number": v
         })
-    return results
+    return results, is_10beer
+
+async def count_posm(posm, label):
+    counter = defaultdict(lambda: defaultdict(int))
+    is_standee = False
+    is_billboard = False
+    for brand, label in zip(posm, label):
+        if label == "Standee":
+            is_standee = True
+        elif label == "Billboard":
+            is_billboard = True
+        counter[label][brand] += 1
+    results = []
+    
+    for type, brand in counter.items():
+        for k, v in brand.items():
+            results.append({
+                "brand": type,
+                "beer_line": k,
+                "object_type": "POSM",
+                "number": v
+            })
+    return results, (is_standee and is_billboard)

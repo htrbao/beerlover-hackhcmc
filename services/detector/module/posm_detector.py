@@ -11,7 +11,7 @@ from services.beer_vlm.prompter import *
 from services.beer_vlm.logger import LogManager
 
 POSM_CLASS = [3, 5, 6, 8, 9, 12, 15,17,19]
-ID2NAME = {3: 'billboard', 5: 'bucket', 6: 'campain-objects', 8: 'display-stand', 9: 'fridge', 12: 'parasol', 15: 'signage', 17: 'standee', 19: 'tent-card'}
+ID2NAME = {3: 'Billboard', 5: 'Bucket', 6: 'Campain Object', 8: 'Display Stand', 9: 'Fridge', 12: 'Parasol', 15: 'Signage', 17: 'Standee', 19: 'Tent Card'}
 
 class PosmDetector:
     def __init__(self, model_path = "weights/posm.pt", billboard_model_path = "weights/posm.pt"):
@@ -26,6 +26,7 @@ class PosmDetector:
         # billboard_results = [{"box": box, "class": "billboard"} for box in billboard_results[0].boxes]
         # filtered_boxes_v10.extend(billboard_results)
         croped_imgs = []
+        label_imgs = []
         numpy_img = cv2.cvtColor(numpy_img, cv2.COLOR_RGB2BGR)
         for box in filtered_boxes_v10:
             xyxy = list(map(int, box['box'].xyxy.view(-1).tolist()))
@@ -34,6 +35,7 @@ class PosmDetector:
             croped_path = os.path.join("services/apis/app/image", f"{uid}.jpg")
             cv2.imwrite(croped_path, croped_img)
             croped_imgs.append(f"?image_path={uid}.jpg")
+            label_imgs.append(box["class"])
         # croped_base64_imgs = []
         # for img in croped_imgs:
         #     img = Image.fromarray(img)
@@ -42,4 +44,4 @@ class PosmDetector:
         #     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
         #     croped_base64_imgs.append(img_str)
         
-        return croped_imgs
+        return croped_imgs, label_imgs

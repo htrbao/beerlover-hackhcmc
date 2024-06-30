@@ -10,8 +10,8 @@ from services.beer_vlm.language_model import ChatGPT
 from services.beer_vlm.prompter import *
 from services.beer_vlm.logger import LogManager
 
-POSM_CLASS = [0]
-ID2NAME = {0: 'carton'}
+POSM_CLASS = [1]
+ID2NAME = {1: 'carton'}
 
 class CartonDetector:
     def __init__(self, model_path = "weights/posm.pt"):

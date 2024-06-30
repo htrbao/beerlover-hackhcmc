@@ -163,7 +163,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             "beer_carton_infos": carton_counter,
             "beer_can_infos": bottle_counter,
             "beer_posm_infos": posm_counter,
-            "description": final_answer["final"].replace("\n", "<br>"),
+            "description": final_answer["final"].replace("\n", "<br/>"),
             "base64_img": base64_img,
             "label_color": label_color,
             "color": distinct_color

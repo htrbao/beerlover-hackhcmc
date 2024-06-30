@@ -53,10 +53,10 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         lm = ChatGPT()
         ps_prompter = PersonPrompter(lm)
         bg_prompter = BackgroundPrompter(lm)
-        # final_prompter = FinalPrompter(lm)
+        final_prompter = FinalPrompter(lm)
         bg_prompt_executor = PromptExecutor().add_prompter(bg_prompter).build()
         bs_prompt_executor = PromptExecutor().add_prompter(ps_prompter).build()
-        # final_prompt_executor = PromptExecutor().add_prompter(final_prompter).build()
+        final_prompt_executor = PromptExecutor().add_prompter(final_prompter).build()
         
         posmprompter = POSMPrompter(lm)
         posm_prompt_executor = PromptExecutor().add_prompter(posmprompter).build()
@@ -101,7 +101,12 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         posm_counter, is_appear = await count_posm(posm_labels, label_imgs)
         
         heineken_presence = is_appear and (is_10beer_carton or is_10beer_bottle)
-
+        final_answer = await final_prompt_executor(main_img, results={
+            "background": bg_answer["background"],
+            "person": drinker_counter,
+            "posm": posm_counter
+        })
+        print(final_answer)
         return UploadRes(success=True, results={
             "background": bg_answer["background"],
             "beer_person_infos": drinker_counter,

@@ -10,6 +10,10 @@ const Results = ({
     beer_person_infos,
     beer_posm_infos,
     background,
+    base64_img,
+    description,
+    label_color,
+    font_color,
 }) => {
     console.log(beer_can_infos);
     return (
@@ -139,7 +143,18 @@ const Results = ({
                             Atmosphere
                         </h4>
                         <p style={{ alignItems: "center", paddingLeft: "20%" }}>
-                            {background.atmosphere.length > 0 && background.atmosphere[0]} {background.atmosphere.length > 1 && <span>&#183;</span>} {background.atmosphere.length > 1 && background.atmosphere[1]} {background.atmosphere.length > 2 && <span>&#183;</span>} {background.atmosphere.length > 2 && background.atmosphere[2]}
+                            {background.atmosphere.length > 0 &&
+                                background.atmosphere[0]}{" "}
+                            {background.atmosphere.length > 1 && (
+                                <span>&#183;</span>
+                            )}{" "}
+                            {background.atmosphere.length > 1 &&
+                                background.atmosphere[1]}{" "}
+                            {background.atmosphere.length > 2 && (
+                                <span>&#183;</span>
+                            )}{" "}
+                            {background.atmosphere.length > 2 &&
+                                background.atmosphere[2]}
                         </p>
                     </div>
                     <div
@@ -157,14 +172,50 @@ const Results = ({
                             Emotions
                         </h4>
                         <p style={{ alignItems: "center", paddingLeft: "20%" }}>
-                            {background.emotion.length > 0 && background.emotion[0]} {background.emotion.length > 1 && <span>&#183;</span>} {background.emotion.length > 1 && background.emotion[1]} {background.emotion.length > 2 && <span>&#183;</span>} {background.emotion.length > 2 && background.emotion[2]}
+                            {background.emotion.length > 0 &&
+                                background.emotion[0]}{" "}
+                            {background.emotion.length > 1 && (
+                                <span>&#183;</span>
+                            )}{" "}
+                            {background.emotion.length > 1 &&
+                                background.emotion[1]}{" "}
+                            {background.emotion.length > 2 && (
+                                <span>&#183;</span>
+                            )}{" "}
+                            {background.emotion.length > 2 &&
+                                background.emotion[2]}
                         </p>
                     </div>
                 </div>
             </div>
             <div className="analyzed-result-container">
                 <h1>Processed Image</h1>
-
+                <div className="analyzed-results-list">
+                    <div className="image-and-drag">
+                        {base64_img && (
+                            <div>
+                                <img
+                                    src={"data:image/png;base64," + base64_img}
+                                    className="upload-image"
+                                    alt=""
+                                />
+                                <div className="analyzed-results-list">
+                                {label_color &&
+                                    label_color.map((item, index) => (
+                                        <p
+                                            key={index}
+                                            style={{
+                                                color: `rgb(${font_color[index][0]}, ${font_color[index][1]}, ${font_color[index][2]})`,
+                                            }}>
+                                            <strong>{item}</strong>
+                                        </p>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <p style={{width:"600px"}}>{description}</p>
+                </div>
             </div>
         </div>
     );

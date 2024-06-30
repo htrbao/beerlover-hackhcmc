@@ -130,7 +130,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         for i, box in enumerate(final_bbox):
             xyxy = box["box"]
             np_img = cv2.rectangle(np_img, (xyxy[0], xyxy[1]),(xyxy[2], xyxy[3]), rgb_color[i], 1)
-            np_img = cv2.putText(np_img, f"{box["class"]}", (xyxy[0], xyxy[1]), color=rgb_color[i])
+            np_img = cv2.putText(np_img, f'{box["class"]}', (xyxy[0], xyxy[1]), color=rgb_color[i])
         cv2.imwrite("test_bbox.png", np_img)
 
         return UploadRes(success=True, results={

@@ -73,8 +73,10 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         ps_task = bs_prompt_executor.execute(main_img, {"person_images": [str(domain) + "image/" +_img for _img in human_croped_base64_imgs]})
         bg_answer, ps_answer = await asyncio.gather(bg_task, ps_task)
         for bbox, brand in zip(human_bbox, ps_answer["person"]):
-            bbox['class'] = str(bbox['class']) + "_" + brand['brand']
-            final_bbox.append(bbox)
+            tmp = {}
+            tmp["box"] = bbox
+            tmp['class'] = "Person" + "_" + brand['brand'] + brand['type']
+            final_bbox.append(tmp)
         drinker_counter = await count_drinkers(ps_answer["person"])
         print(drinker_counter)
         

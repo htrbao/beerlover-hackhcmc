@@ -44,10 +44,9 @@ app.add_middleware(
 async def upload(file: UploadFile, request: Request) -> UploadRes:
     # global log_mng
     try:
+        final_bbox = []
         domain = request.base_url
-        beer_can_infos =[]
-        beer_carton_infos =[]
-        beer_person_infos =[]
+
         img = Image.open(file.file).convert("RGB")
 
         lm = ChatGPT()
@@ -67,37 +66,49 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         main_img = str(domain) + "image/"  + f"?image_path={uid}.jpg"
             
         human_detector = HumanDetector()
-        human_croped_base64_imgs = human_detector.detect(np.asarray(img))
+        human_croped_base64_imgs, human_bbox = human_detector.detect(np.asarray(img))
         
         print([str(domain) + "image/" +_img for _img in human_croped_base64_imgs])
         bg_task = bg_prompt_executor.execute(main_img)
         ps_task = bs_prompt_executor.execute(main_img, {"person_images": [str(domain) + "image/" +_img for _img in human_croped_base64_imgs]})
         bg_answer, ps_answer = await asyncio.gather(bg_task, ps_task)
+        for bbox, brand in zip(human_bbox, ps_answer["person"]):
+            bbox['class'] += "_" + brand['brand']
+            final_bbox.append(bbox)
         drinker_counter = await count_drinkers(ps_answer["person"])
         print(drinker_counter)
         
         # carton detect
         carton_detector = CartonDetector()
-        carton_croped_base64_imgs = carton_detector.detect(np.asarray(img))
+        carton_croped_base64_imgs, carton_bbox = carton_detector.detect(np.asarray(img))
         carton_results = []
         for carton in carton_croped_base64_imgs:
             brand = recognize_siglip_n_dino(carton)
             carton_results.append(brand)
+        for bbox, brand in zip(carton_bbox, carton_results):
+            bbox['class'] += "_" + brand
+            final_bbox.append(bbox)
         carton_counter, is_10beer_carton = await count_objects(carton_results, type="Carton")
         
         # bottle detect
         bottle_detector = BottleDetector()
-        bottle_croped_base64_imgs = bottle_detector.detect(np.asarray(img))
+        bottle_croped_base64_imgs, bottle_bbox = bottle_detector.detect(np.asarray(img))
         bottle_results = []
         for bottle in bottle_croped_base64_imgs:
             brand = recognize_siglip_n_dino(bottle)
             bottle_results.append(brand)
+        for bbox, brand in zip(bottle_bbox, bottle_results):
+            bbox['class'] += "_" + brand
+            final_bbox.append(bbox)
         bottle_counter, is_10beer_bottle = await count_objects(bottle_results, type="Can")
         
         posm_detector = PosmDetector()
-        posm_croped_base64_imgs, label_imgs = posm_detector.detect(np.asarray(img))
+        posm_croped_base64_imgs, label_imgs, posm_bbox = posm_detector.detect(np.asarray(img))
         posm_labels = await posm_prompt_executor.execute(None, {"posm_images":  [str(domain) + "image/" +_img for _img in posm_croped_base64_imgs]})
         posm_labels = posm_labels["posm"]
+        for bbox, brand in zip(posm_bbox, posm_labels):
+            bbox['class'] += "_" + brand['brand']
+            final_bbox.append(bbox)
         posm_counter, is_appear = await count_posm(posm_labels, label_imgs)
         
         heineken_presence = is_appear and (is_10beer_carton or is_10beer_bottle)
@@ -106,13 +117,16 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             "person": drinker_counter,
             "posm": posm_counter
         })
-        print(final_answer)
+        
+        print(final_bbox)
+
         return UploadRes(success=True, results={
             "background": bg_answer["background"],
             "beer_person_infos": drinker_counter,
             "beer_carton_infos": carton_counter,
             "beer_can_infos": bottle_counter,
-            "beer_posm_infos": posm_counter
+            "beer_posm_infos": posm_counter,
+            "description": final_answer["final"]
         })
     except Exception as e:
         print(traceback.format_exc())

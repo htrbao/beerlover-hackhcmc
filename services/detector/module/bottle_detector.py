@@ -34,4 +34,4 @@ class BottleDetector:
         #     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
         #     croped_base64_imgs.append(img_str)
         
-        return croped_imgs
+        return croped_imgs, filtered_boxes_v10

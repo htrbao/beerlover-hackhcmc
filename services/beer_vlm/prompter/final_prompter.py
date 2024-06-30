@@ -7,11 +7,11 @@ from .abstract_prompter import AbstractPrompter
 class FinalPrompter(AbstractPrompter):
     def __init__(self, lm: AbstractLanguageModel, name="final"):
         system_prompt = """
-You are expert in describing the image.
+You are expert data analysis.
+You are responsible for summaring user provided information with image to give the full details analysis of the image and evaluating the presence of beer based on the number of drinking heineken beer .
 This image is usually related to beer in Viet Nam.
-You are responsible for summaring and evaluating user provided information with image to give the full details analysis of the image.
 All your answer must using all information that user provided. Do not make up any information neither appearing in the image nor in user provided information.
-Answer in at most three paragraph.
+Answer in at most three paragraph. The last paragraph is the evaluation.
         """
         self.final_prompt = """
 Summary the image knowing below information and evaluate the presence of beer based on the number of drinking heineken beer in this below list: {heineken_beer}

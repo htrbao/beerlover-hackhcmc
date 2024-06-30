@@ -53,9 +53,10 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         lm = ChatGPT()
         ps_prompter = PersonPrompter(lm)
         bg_prompter = BackgroundPrompter(lm)
+        # final_prompter = FinalPrompter(lm)
         bg_prompt_executor = PromptExecutor().add_prompter(bg_prompter).build()
         bs_prompt_executor = PromptExecutor().add_prompter(ps_prompter).build()
-        
+        # final_prompt_executor = PromptExecutor().add_prompter(final_prompter).build()
         
         posmprompter = POSMPrompter(lm)
         posm_prompt_executor = PromptExecutor().add_prompter(posmprompter).build()
@@ -82,7 +83,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         for carton in carton_croped_base64_imgs:
             brand = recognize_siglip_n_dino(carton)
             carton_results.append(brand)
-        carton_counter, is_10beer = await count_objects(carton_results, type="Carton")
+        carton_counter, is_10beer_carton = await count_objects(carton_results, type="Carton")
         
         # bottle detect
         bottle_detector = BottleDetector()
@@ -91,7 +92,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         for bottle in bottle_croped_base64_imgs:
             brand = recognize_siglip_n_dino(bottle)
             bottle_results.append(brand)
-        bottle_counter = await count_objects(bottle_results, type="Can")
+        bottle_counter, is_10beer_bottle = await count_objects(bottle_results, type="Can")
         
         posm_detector = PosmDetector()
         posm_croped_base64_imgs, label_imgs = posm_detector.detect(np.asarray(img))
@@ -99,7 +100,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         posm_labels = posm_labels["posm"]
         posm_counter, is_appear = await count_posm(posm_labels, label_imgs)
         
-        heineken_presence = is_appear and is_10beer
+        heineken_presence = is_appear and (is_10beer_carton or is_10beer_bottle)
 
         return UploadRes(success=True, results={
             "background": bg_answer["background"],

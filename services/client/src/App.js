@@ -64,6 +64,7 @@ function App() {
             atmosphere: ["casual", "welcoming", "bustling"],
             emotion: ["relaxed", "social", "content"],
         },
+        description: "This is the hihi haha"
     });
     return (
         <div>
@@ -75,6 +76,10 @@ function App() {
                     beer_person_infos={requestData.beer_person_infos}
                     beer_posm_infos={requestData.beer_posm_infos}
                     background={requestData.background}
+                    base64_img={requestData.base64_img} 
+                    label_color={requestData.label_color}
+                    font_color={requestData.color}
+                    description={requestData.description}
                 />
             )}
         </div>

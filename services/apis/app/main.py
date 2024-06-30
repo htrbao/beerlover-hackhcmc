@@ -101,7 +101,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         posm_counter, is_appear = await count_posm(posm_labels, label_imgs)
         
         heineken_presence = is_appear and (is_10beer_carton or is_10beer_bottle)
-        final_answer = await final_prompt_executor(main_img, results={
+        final_answer = await final_prompt_executor.execute(main_img, results={
             "background": bg_answer["background"],
             "person": drinker_counter,
             "posm": posm_counter

@@ -74,7 +74,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         bg_answer, ps_answer = await asyncio.gather(bg_task, ps_task)
         for bbox, brand in zip(human_bbox, ps_answer["person"]):
             tmp = {}
-            tmp["box"] = list(map(int, bbox.xyxy.view(-1).tolist()))
+            tmp["box"] = bbox
             tmp['class'] = "Person" + "_" + brand['brand'] + brand['type']
             final_bbox.append(tmp)
         drinker_counter = await count_drinkers(ps_answer["person"])
@@ -88,6 +88,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             brand = recognize_siglip_n_dino(carton)
             carton_results.append(brand)
         for bbox, brand in zip(carton_bbox, carton_results):
+            bbox['box'] = list(map(int, bbox['box'].xyxy.view(-1).tolist()))
             bbox['class'] = str(bbox['class']) + "_" + brand
             final_bbox.append(bbox)
         carton_counter, is_10beer_carton = await count_objects(carton_results, type="Carton")
@@ -100,6 +101,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             brand = recognize_siglip_n_dino(bottle)
             bottle_results.append(brand)
         for bbox, brand in zip(bottle_bbox, bottle_results):
+            bbox['box'] = list(map(int, bbox['box'].xyxy.view(-1).tolist()))
             bbox['class'] = str(bbox['class']) + "_" + brand
             final_bbox.append(bbox)
         bottle_counter, is_10beer_bottle = await count_objects(bottle_results, type="Can")
@@ -109,6 +111,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         posm_labels = await posm_prompt_executor.execute(None, {"posm_images":  [str(domain) + "image/" +_img for _img in posm_croped_base64_imgs]})
         posm_labels = posm_labels["posm"]
         for bbox, brand in zip(posm_bbox, posm_labels):
+            bbox['box'] = list(map(int, bbox['box'].xyxy.view(-1).tolist()))
             bbox['class'] = str(bbox['class']) + "_" + brand['brand']
             final_bbox.append(bbox)
         posm_counter, is_appear = await count_posm(posm_labels, label_imgs)

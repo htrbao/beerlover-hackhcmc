@@ -11,15 +11,18 @@
     margin: 2% 0 0 2%;
 }
 
+.analyzed-result-container h2 {
+    margin: 2% 0 0 3.5%;
+}
+
 .analyzed-results-list {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: row;
-    flex-wrap: wrap;
     overflow-x: scroll;
     gap: 25px;
-    margin: 10px 10px 0 20px;
+    margin: 10px 10px 0 7%;
     padding-bottom: 50px;
 }
 

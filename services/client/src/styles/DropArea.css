@@ -6,7 +6,7 @@
     --txt-second-color: #ccc;
     --border-color: #4267b2;
     --box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    --circle-border-size: 0.2px;
+    --circle-border-size: 0.01px;
 }
 
 .circle {
@@ -24,7 +24,7 @@
 .circle.large {
     width: 400px;
     height: 400px;
-    border-color: #c8c8c8;
+    border-color: #d8d9d9;
 }
 
 /* .circle.large::after {
@@ -36,7 +36,7 @@
     width: 300px;
     height: 300px;
     opacity: 110%;
-    border-color: #8f8f8f;
+    border-color: #c8c8c8;
 }
 
 /* .circle.medium::after {
@@ -47,7 +47,7 @@
 .circle.small {
     width: 200px;
     height: 200px;
-    border-color: #5f4f5f;
+    border-color: #9f9f8f;
 }
 
 /* .circle.small::after {
@@ -58,7 +58,7 @@
 .circle.tiny {
     width: 100px;
     height: 100px;
-    border-color: #2f2d2f;
+    border-color: #5f4f5f;
 }
 
 .icon {

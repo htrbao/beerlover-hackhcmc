@@ -89,6 +89,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             brand = recognize_siglip_n_dino(carton)
             carton_results.append(brand)
         for bbox, brand in zip(carton_bbox, carton_results):
+            if brand is None: continue
             bbox['box'] = list(map(int, bbox['box'].xyxy.view(-1).tolist()))
             bbox['class'] = str(bbox['class']) + "_" + brand
             final_bbox.append(bbox)
@@ -102,6 +103,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             brand = recognize_siglip_n_dino(bottle)
             bottle_results.append(brand)
         for bbox, brand in zip(bottle_bbox, bottle_results):
+            if brand is None: continue
             bbox['box'] = list(map(int, bbox['box'].xyxy.view(-1).tolist()))
             bbox['class'] = str(bbox['class']) + "_" + brand
             final_bbox.append(bbox)

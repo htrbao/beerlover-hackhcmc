@@ -127,7 +127,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         })
         
         print(final_bbox)
-        rgb_color = [tuple(random.randint(0, 255) for _ in range(3) for _ in final_bbox)]
+        rgb_color = [tuple(random.randint(0, 255) for _ in range(3)) for _ in final_bbox]
         np_img = np.array(img)
         for i, box in enumerate(final_bbox):
             xyxy = box["box"]

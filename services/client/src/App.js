@@ -64,7 +64,7 @@ function App() {
             atmosphere: ["casual", "welcoming", "bustling"],
             emotion: ["relaxed", "social", "content"],
         },
-        description: "This is the hihi haha"
+        description: "Waiting for the server extract feature to be available!"
     });
     return (
         <div>

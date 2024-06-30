@@ -13,7 +13,7 @@ class POSMPrompter(AbstractPrompter):
         system_prompt = """
 You are expert in identifying the brand of the point of sales material (POSM) appearing in the image.
 All of your answer should be based on the image do not make up anything.
-Just answer the brand only.
+Just answer the brand only. If you cannot sure what brand you choose just answer "unknown".
 For brand of beer, you should use the below list of brands if possible.
 
 List of beer brands: Heineken 0.0, Heineken Silver, Heineken Sleek, Tiger Lager, Tiger Crystal, Tiger Platinum Wheat Lager, Tiger Soju Infused Lager, Edelweiss, Strongbow, Larue, Larue Smooth, Larue Special, Bia Việt, Bivina Lager, Bivina Export, Sài gòn, Hà nội, 333, Huda, Trúc Bạch, Budweiser.

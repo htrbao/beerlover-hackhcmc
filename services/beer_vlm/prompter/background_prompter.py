@@ -30,7 +30,7 @@ You answer should be the JSON format, example:
 }
         """
         self.background_prompt = """
-Answer the location, atmosphere and emotion of image in JSON format.
+Answer the location, atmosphere, emotion and activity of image in JSON format.
 """
 # - People who are appearing in the background that could be customers, promotion peoples, etc. If promotion people are in the background, you should describe about logo or brand on their image which beer they are promoting.
 
@@ -47,7 +47,7 @@ Answer the location, atmosphere and emotion of image in JSON format.
             "activity": "unknown",
             "atmosphere": ["neutral"],
             "emotion": ["neutral"],
-            "prompt": self.background_prompt_prepare(),
+            "prompt": await self.background_prompt_prepare(),
         }
     
     async def background_prompt_prepare(self, location="unknown", activity="unknown", atmosphere=["neutral"], emotion=["neutral"]):
@@ -64,7 +64,7 @@ Answer the location, atmosphere and emotion of image in JSON format.
         answer["prompt"] = await self.background_prompt_prepare(**answer)
         return answer
     async def query(self, image: Optional[str], **results) -> str:
-        # return self.handle_background(image, **results)
+        # return await self.handle_background(image, **results)
         try:
             return await self.handle_background(image, **results)
         except:

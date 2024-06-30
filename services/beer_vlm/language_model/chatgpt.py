@@ -87,6 +87,7 @@ class ChatGPT(AbstractLanguageModel):
         :return: Response(s) from the OpenAI model.
         :rtype: Dict
         """
+        start_time = time.monotonic()
         json_format = None
         if "JSON" in query:
             json_format = {"type": "json_object"}
@@ -112,7 +113,7 @@ class ChatGPT(AbstractLanguageModel):
                         "type": "image_url",
                         "image_url": {
                             "url": f"data:image/jpeg;base64,{main_image}",
-                            "detail": "high"
+                            "detail": "low"
                             }
                         
                     },
@@ -146,6 +147,7 @@ class ChatGPT(AbstractLanguageModel):
 
         if self.cache:
             self.respone_cache[query] = response
+        print("time: ", time.monotonic()- start_time)
         return response
 
     @backoff.on_exception(backoff.expo, openai.OpenAIError, max_time=10, max_tries=6)
@@ -179,9 +181,6 @@ class ChatGPT(AbstractLanguageModel):
             self.prompt_token_cost * prompt_tokens_k
             + self.response_token_cost * completion_tokens_k
         )
-        self.log_mng.logger.debug(f"Prompt: {messages[-1]}")
-        self.log_mng.logger.debug("Cost: %f", self.cost)
-        print(self.cost)
         return response
 
     async def get_response_texts(self, query_response: Union[List[Dict], Dict]) -> List[str]:

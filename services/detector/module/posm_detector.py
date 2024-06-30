@@ -22,10 +22,8 @@ class PosmDetector:
         self.posmprompter = POSMPrompter(self.lm)
         self.prompt_executor = PromptExecutor().add_prompter(self.posmprompter).build()
 
-
-    async def detect(self, img):
-        numpy_img = cv2.imread(img)
-        results = self.model(numpy_img, save=True)
+    def detect(self, numpy_img):
+        results = self.model(numpy_img)
         # billboard_results = self.billboard_model(numpy_img, save=True)
         filtered_boxes_v10 = [{"box": box, "class": ID2NAME[int(box.cls)]} for box in results[0].boxes if box.cls in POSM_CLASS]
         # billboard_results = [{"box": box, "class": "billboard"} for box in billboard_results[0].boxes]
@@ -41,7 +39,5 @@ class PosmDetector:
             img.save(buffered, format="JPEG")
             img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
             croped_base64_imgs.append(img_str)
-        labels = await self.prompt_executor.execute(None, {"posm_images": croped_base64_imgs})
-        labels = labels["posm"]
         
-        return labels
+        return croped_base64_imgs

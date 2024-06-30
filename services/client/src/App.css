@@ -12,7 +12,7 @@ body {
   /* align-items: stretch; */
 
   width: 100%;
-  height: fit-content;
+  height: 100vh;
 }
 
 .App-logo {

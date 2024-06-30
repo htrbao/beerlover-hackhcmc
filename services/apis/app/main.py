@@ -70,6 +70,8 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         human_croped_base64_imgs, human_bbox = human_detector.detect(np.asarray(img))
         
         rgb_color = []
+        label_color = []
+        distinct_color = []
         print([str(domain) + "image/" +_img for _img in human_croped_base64_imgs])
         bg_task = bg_prompt_executor.execute(main_img)
         ps_task = bs_prompt_executor.execute(main_img, {"person_images": [str(domain) + "image/" +_img for _img in human_croped_base64_imgs]})
@@ -79,7 +81,10 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             tmp["box"] = bbox
             tmp['class'] = "Person" + "_" + brand['brand'] + brand['type']
             final_bbox.append(tmp)
-            rgb_color.append((0,0,255))
+            if tmp['class'] not in label_color:
+                label_color.append(tmp['class'])
+                distinct_color.append([random.randint(0, 255) for _ in range(3)])
+            rgb_color.append(distinct_color[label_color.index(tmp['class'])])
         drinker_counter = await count_drinkers(ps_answer["person"])
         print(drinker_counter)
         
@@ -95,7 +100,10 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             bbox['box'] = list(map(int, bbox['box'].xyxy.view(-1).tolist()))
             bbox['class'] = str(bbox['class']) + "_" + brand
             final_bbox.append(bbox)
-            rgb_color.append((0,255,0))
+            if tmp['class'] not in label_color:
+                label_color.append(tmp['class'])
+                distinct_color.append([random.randint(0, 255) for _ in range(3)])
+            rgb_color.append(distinct_color[label_color.index(tmp['class'])])
         carton_counter, is_10beer_carton = await count_objects(carton_results, type="Carton")
         
         # bottle detect
@@ -110,7 +118,10 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             bbox['box'] = list(map(int, bbox['box'].xyxy.view(-1).tolist()))
             bbox['class'] = str(bbox['class']) + "_" + brand
             final_bbox.append(bbox)
-            rgb_color.append((255,0,0))
+            if tmp['class'] not in label_color:
+                label_color.append(tmp['class'])
+                distinct_color.append([random.randint(0, 255) for _ in range(3)])
+            rgb_color.append(distinct_color[label_color.index(tmp['class'])])
         bottle_counter, is_10beer_bottle = await count_objects(bottle_results, type="Can")
         
         posm_detector = PosmDetector()
@@ -121,7 +132,10 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             bbox['box'] = list(map(int, bbox['box'].xyxy.view(-1).tolist()))
             bbox['class'] = str(bbox['class']) + "_" + brand['brand']
             final_bbox.append(bbox)
-            rgb_color.append((255,255,255))
+            if tmp['class'] not in label_color:
+                label_color.append(tmp['class'])
+                distinct_color.append([random.randint(0, 255) for _ in range(3)])
+            rgb_color.append(distinct_color[label_color.index(tmp['class'])])
         posm_counter, is_appear = await count_posm(posm_labels, label_imgs)
         
         heineken_presence = is_appear and (is_10beer_carton or is_10beer_bottle)
@@ -151,7 +165,9 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             "beer_can_infos": bottle_counter,
             "beer_posm_infos": posm_counter,
             "description": final_answer["final"],
-            "base64_img": base64_img
+            "base64_img": base64_img,
+            "label_color": label_color,
+            "color": distinct_color
         })
     except Exception as e:
         print(traceback.format_exc())

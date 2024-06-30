@@ -14,7 +14,9 @@ All your answer must using all information that user provided. Do not make up an
 Answer in at most three paragraph. The last paragraph is the evaluation.
         """
         self.final_prompt = """
-Summary the image knowing below information and evaluate the presence of beer based on the number of drinking heineken beer in this below list: {heineken_beer}
+Summary the image knowing below information and evaluate the presence of beer based on the number of drinking heineken company beer
+All beer in this list is Heineken Company Beer:{heineken_beer}
+
 BACKGROUND: {background}
 ---END BACKGROUND---
 PEOPLE: {person}

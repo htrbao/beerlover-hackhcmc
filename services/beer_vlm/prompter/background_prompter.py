@@ -11,7 +11,7 @@ class BackgroundPrompter(AbstractPrompter):
     def __init__(self, lm: AbstractLanguageModel, name="background"):
         system_prompt = """
 You are expert in identifying the location of the images.
-All of your answer should be based on the image do not make up anything.
+All of your answer should be based on the image.
 
 You only need to be choose a single location from this list of locations: restaurant, supermarket, bar, pub, brewery, liquor store, convenience store, grosary store, beer festival, private house, hotel, sports stadium, concert venue, airport lounge, cruise ship, nightclub, cafeteria, train station kiosk, food truck, beach resort, market, backyard BBQ, camping site, house party, street restaurant, beer event, celebration, gathering.
 

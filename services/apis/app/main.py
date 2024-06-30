@@ -166,7 +166,7 @@ async def count_posm(posm, label):
             is_standee = True
         elif label == "Billboard":
             is_billboard = True
-        counter[label][brand] += 1
+        counter[label][brand["brand"]] += 1
     results = []
     
     for type, brand in counter.items():

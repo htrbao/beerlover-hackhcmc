@@ -100,10 +100,10 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             bbox['box'] = list(map(int, bbox['box'].xyxy.view(-1).tolist()))
             bbox['class'] = str(bbox['class']) + "_" + brand
             final_bbox.append(bbox)
-            if tmp['class'] not in label_color:
-                label_color.append(tmp['class'])
+            if bbox['class'] not in label_color:
+                label_color.append(bbox['class'])
                 distinct_color.append([random.randint(0, 255) for _ in range(3)])
-            rgb_color.append(distinct_color[label_color.index(tmp['class'])])
+            rgb_color.append(distinct_color[label_color.index(bbox['class'])])
         carton_counter, is_10beer_carton = await count_objects(carton_results, type="Carton")
         
         # bottle detect
@@ -118,10 +118,10 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             bbox['box'] = list(map(int, bbox['box'].xyxy.view(-1).tolist()))
             bbox['class'] = str(bbox['class']) + "_" + brand
             final_bbox.append(bbox)
-            if tmp['class'] not in label_color:
-                label_color.append(tmp['class'])
+            if bbox['class'] not in label_color:
+                label_color.append(bbox['class'])
                 distinct_color.append([random.randint(0, 255) for _ in range(3)])
-            rgb_color.append(distinct_color[label_color.index(tmp['class'])])
+            rgb_color.append(distinct_color[label_color.index(bbox['class'])])
         bottle_counter, is_10beer_bottle = await count_objects(bottle_results, type="Can")
         
         posm_detector = PosmDetector()
@@ -132,10 +132,10 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             bbox['box'] = list(map(int, bbox['box'].xyxy.view(-1).tolist()))
             bbox['class'] = str(bbox['class']) + "_" + brand['brand']
             final_bbox.append(bbox)
-            if tmp['class'] not in label_color:
-                label_color.append(tmp['class'])
+            if bbox['class'] not in label_color:
+                label_color.append(bbox['class'])
                 distinct_color.append([random.randint(0, 255) for _ in range(3)])
-            rgb_color.append(distinct_color[label_color.index(tmp['class'])])
+            rgb_color.append(distinct_color[label_color.index(bbox['class'])])
         posm_counter, is_appear = await count_posm(posm_labels, label_imgs)
         
         heineken_presence = is_appear and (is_10beer_carton or is_10beer_bottle)

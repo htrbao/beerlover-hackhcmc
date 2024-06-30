@@ -72,7 +72,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         rgb_color = []
         label_color = []
         distinct_color = []
-        print([str(domain) + "image/" +_img for _img in human_croped_base64_imgs])
+        # print([str(domain) + "image/" +_img for _img in human_croped_base64_imgs])
         bg_task = bg_prompt_executor.execute(main_img)
         ps_task = bs_prompt_executor.execute(main_img, {"person_images": [str(domain) + "image/" +_img for _img in human_croped_base64_imgs]})
         bg_answer, ps_answer = await asyncio.gather(bg_task, ps_task)
@@ -86,7 +86,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
                 distinct_color.append([random.randint(0, 255) for _ in range(3)])
             rgb_color.append(distinct_color[label_color.index(tmp['class'])])
         drinker_counter = await count_drinkers(ps_answer["person"])
-        print(drinker_counter)
+        # print(drinker_counter)
         
         # carton detect
         carton_detector = CartonDetector()
@@ -145,7 +145,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             "posm": posm_counter
         })
         
-        print(final_bbox)
+        # print(final_bbox)
         np_img = np.array(img)
         for i, box in enumerate(final_bbox):
             xyxy = box["box"]

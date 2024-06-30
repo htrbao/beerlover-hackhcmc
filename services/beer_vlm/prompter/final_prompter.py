@@ -55,9 +55,9 @@ Answer in English:
             
         
     async def query(self, image: Optional[str], **results) -> str:
-        background_prompt = self.format_background(results.get("background", None))
-        person_prompt = self.format_person(results.get("person", None))
-        posm_prompt = self.format_posm(results.get("posm", None))
+        background_prompt = await self.format_background(results.get("background", None))
+        person_prompt = await self.format_person(results.get("person", None))
+        posm_prompt = await self.format_posm(results.get("posm", None))
         # image showing [number] [object_type] of [list of brands].
         query_prompt = self.final_prompt.format(background=background_prompt, person=person_prompt, posm=posm_prompt, heineken_beer = self.heineken_beer )
         answer = await self.lm.get_response_texts(await self.lm.query(query_prompt, image, 1, self.system_prompt))

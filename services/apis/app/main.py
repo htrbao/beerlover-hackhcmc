@@ -129,10 +129,11 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         print(final_bbox)
         rgb_color = [tuple(random.randint(0, 255) for _ in range(3)) for _ in final_bbox]
         np_img = np.array(img)
+        np_img = cv2.cvtColor(np_img, cv2.COLOR_RGB2BGR)
         for i, box in enumerate(final_bbox):
             xyxy = box["box"]
-            np_img = cv2.rectangle(np_img, (int(xyxy[0]), int(xyxy[1])),(int(xyxy[2]), int(xyxy[3])), rgb_color[i], 1)
-            np_img = cv2.putText(np_img, f'{box["class"]}', (int(xyxy[0]), int(xyxy[1])), color=rgb_color[i], fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1 )
+            np_img = cv2.rectangle(np_img, (int(xyxy[0]), int(xyxy[1])),(int(xyxy[2]), int(xyxy[3])), rgb_color[i], thickness=3)
+            np_img = cv2.putText(np_img, f'{box["class"]}', (int(xyxy[0]), int(xyxy[1])), color=rgb_color[i], fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=2 )
         cv2.imwrite("test_bbox.png", np_img)
 
         return UploadRes(success=True, results={

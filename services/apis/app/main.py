@@ -149,7 +149,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         np_img = np.array(img)
         for i, box in enumerate(final_bbox):
             xyxy = box["box"]
-            np_img = cv2.rectangle(np_img, (int(xyxy[0]), int(xyxy[1])),(int(xyxy[2]), int(xyxy[3])), rgb_color[i], thickness=3)
+            np_img = cv2.rectangle(np_img, (int(xyxy[0]), int(xyxy[1])),(int(xyxy[2]), int(xyxy[3])), rgb_color[i], thickness=5)
         base64_img = Image.fromarray(np_img).convert('RGB')
         buffered = io.BytesIO()
         base64_img.save(buffered, format="JPEG")
@@ -163,7 +163,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             "beer_carton_infos": carton_counter,
             "beer_can_infos": bottle_counter,
             "beer_posm_infos": posm_counter,
-            "description": final_answer["final"].replace("\n", "<br/>"),
+            "description": final_answer["final"],
             "base64_img": base64_img,
             "label_color": label_color,
             "color": distinct_color

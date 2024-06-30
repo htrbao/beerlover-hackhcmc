@@ -95,9 +95,10 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         
         posm_detector = PosmDetector()
         posm_croped_base64_imgs, label_imgs = posm_detector.detect(np.asarray(img))
-        
+        print(label_imgs)
         posm_labels = await posm_prompt_executor.execute(None, {"posm_images": posm_croped_base64_imgs})
         posm_labels = posm_labels["posm"]
+        print(posm_labels)
         posm_counter, is_appear = await count_posm(posm_labels, label_imgs)
         
         heineken_presence = is_appear and is_10beer

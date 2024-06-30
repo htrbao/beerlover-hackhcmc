@@ -14,13 +14,13 @@ POSM_CLASS = [0]
 ID2NAME = {0: 'carton'}
 
 class CartonDetector:
-    def __init__(self, model_path = "weights/carton.pt"):
+    def __init__(self, model_path = "weights/posm.pt"):
         self.log_mng = LogManager("test.log", level="debug")
         self.model = YOLOv10(model_path)
         # self.billboard_model = YOLOv10(billboard_model_path)
 
     def detect(self, numpy_img):
-        results = self.model(numpy_img, conf=0.3)
+        results = self.model(numpy_img)
         # billboard_results = self.billboard_model(numpy_img, save=True)
         filtered_boxes_v10 = [{"box": box, "class": ID2NAME[int(box.cls)]} for box in results[0].boxes if box.cls in POSM_CLASS]
         # billboard_results = [{"box": box, "class": "billboard"} for box in billboard_results[0].boxes]

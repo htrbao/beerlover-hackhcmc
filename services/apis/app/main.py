@@ -22,6 +22,7 @@ from services.beer_vlm.utils import encode_image
 from services.detector.module.posm_detector import PosmDetector
 from services.detector.module.human_detector import HumanDetector
 from services.detector.module.carton_detector import CartonDetector
+from services.detector.module.bottle_detector import BottleDetector
 from collections import defaultdict
 import io
 # from .config import settings
@@ -49,8 +50,6 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         beer_person_infos =[]
         img = Image.open(file.file).convert("RGB")
 
-        votes = recognize_siglip_n_dino(img)
-        print(votes)
         lm = ChatGPT()
         ps_prompter = PersonPrompter(lm)
         bg_prompter = BackgroundPrompter(lm)
@@ -76,13 +75,24 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         drinker_counter = await count_drinkers(ps_answer["person"])
         print(drinker_counter)
         
+        # carton detect
         carton_detector = CartonDetector()
         carton_croped_base64_imgs = carton_detector.detect(np.asarray(img))
         carton_results = []
         for carton in carton_croped_base64_imgs:
             brand = recognize_siglip_n_dino(carton)
             carton_results.append(brand)
-        carton_counter = await count_carton(carton_results)
+        carton_counter = await count_objects(carton_results, type="Carton")
+        
+        # bottle detect
+        bottle_detector = BottleDetector()
+        bottle_croped_base64_imgs = bottle_detector.detect(np.asarray(img))
+        bottle_results = []
+        for bottle in bottle_croped_base64_imgs:
+            brand = recognize_siglip_n_dino(bottle)
+            bottle_results.append(brand)
+        bottle_counter = await count_objects(bottle_results, type="Can")
+        
         # posm_detector = PosmDetector()
         # posm_croped_base64_imgs = posm_detector.detect("test_img/0.jpg")
         
@@ -94,6 +104,7 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             "background": bg_answer["background"],
             "beer_person_infos": drinker_counter,
             "beer_carton_infos": carton_counter,
+            "beer_can_infos": bottle_counter
         })
     except Exception as e:
         print(traceback.format_exc())
@@ -124,16 +135,16 @@ async def count_drinkers(person):
             })
     return results
 
-async def count_carton(cartons):
+async def count_objects(objects, type):
     counter = defaultdict(int)
-    for c in cartons:
+    for c in objects:
         counter[c] += 1
     results = []
     
     for brand, v in counter.items():
         results.append({
             "brand": brand,
-            "object_type": "Carton",
+            "object_type": type,
             "number": v
         })
     return results

@@ -134,7 +134,12 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             xyxy = box["box"]
             np_img = cv2.rectangle(np_img, (int(xyxy[0]), int(xyxy[1])),(int(xyxy[2]), int(xyxy[3])), rgb_color[i], thickness=3)
             np_img = cv2.putText(np_img, f'{box["class"]}', (int(xyxy[0]), int(xyxy[1])), color=rgb_color[i], fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=2 )
+        base64_img = Image.fromarray(np_img)
+        buffered = io.BytesIO()
+        base64_img.save(buffered, format="JPEG")
+        base64_img = base64.b64encode(buffered.getvalue()).decode("utf-8")
         cv2.imwrite("test_bbox.png", np_img)
+        
 
         return UploadRes(success=True, results={
             "background": bg_answer["background"],
@@ -142,7 +147,8 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
             "beer_carton_infos": carton_counter,
             "beer_can_infos": bottle_counter,
             "beer_posm_infos": posm_counter,
-            "description": final_answer["final"]
+            "description": final_answer["final"],
+            "base64_img": base64_img
         })
     except Exception as e:
         print(traceback.format_exc())

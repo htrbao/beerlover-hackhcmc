@@ -154,7 +154,6 @@ async def upload(file: UploadFile, request: Request) -> UploadRes:
         buffered = io.BytesIO()
         base64_img.save(buffered, format="JPEG")
         base64_img = base64.b64encode(buffered.getvalue()).decode("utf-8")
-        cv2.imwrite("test_bbox.png", np_img)
         
 
         return UploadRes(success=True, results={

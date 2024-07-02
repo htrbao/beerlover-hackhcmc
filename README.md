@@ -1,7 +1,19 @@
-# 🍻 beerlover-hackhcmc at Digital Empowerment @ AngelHack HCMC '24
+# 🍻 beerlover-hackhcmc at Digital Empowerment Track @ AngelHack HCMC '24
+
+
 
 ## Objective
 Creating a website where all the information, after being analyzed, will be visualized in the form of a dashboard to help visualize the user experience.
+
+## Key Features
+- Count the number of 🍾 Cans/Bottles, 📦 Cartons, 👫 People and ♺ POSM; then transform them into distributions as Pie Chart
+![statistic](docs/stats.png)
+
+- Also detect information about Activities and Locations, Atmosphere, Emotion 
+![ALAE](docs/location.png)
+
+- Then all of the information, after being processed (drawing bbox, write report,...) will be shown in the end of the website
+![Processed](docs/processed.png)
 
 ## Technology:
 Core techniques:
